@@ -92,7 +92,6 @@ In order to make the code easily digestible and editable/debuggable, I anticipat
 
 ### Bonus Features
 
-- Ability to pause gameplay.
 - More levels!
 - Best time counter!
   - Note: this game will have no database, so this feature will not persist on refresh.
