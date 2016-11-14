@@ -1,12 +1,12 @@
 ## Chips Challenge
 
-A clone of the 1991 computer game [Chips Challenge][wikipedia], created by Chuck Somerville.
+A clone of the first level of the 1991 computer game [Chips Challenge][wikipedia], created by Chuck Sommerville.
 
 ### Background
 
-Chip has to dodge deadly monsters and navigate brain-bending puzzles on each level to collect all the computer chips hidden around the map before he can proceed to the next level.
+In this classic PC adventure puzzle game, our hero Chip is a high school computer geek on a journey to win the approval of Melinda the Mental Marvel by successfully navigating her deadly Clubhouse -- collecting computer chips and avoiding peril along the way -- in order to gain entry into her Bit Busters club. Chip must use his every mental resource to dodge deadly monsters and navigate brain-bending puzzles on each level to find all of the computer chips hidden around the map in a race against the countdown clock!
 
-Chips Challenge is a 1-player game played by using the arrow keys to move our hero, Chip, in the four cardinal directions throughout a gaunlet of obstacles, in order to collect enough computer chips to pass through a portal to the next level.
+Chips Challenge is a 1-player game which uses the arrow keys to move Chip in the four cardinal directions. Chip's field of view is limited to a 9 x 9 grid in which he remains centered, as the player gives him commands to move, the map shifts around him. As he explores, he must run a gantlet of obstacles, so that he can collect the computer chips required to pass through the portal to the next level.
 
 Chip's various challenges include locked doors to which he must find keys, surfaces which are impassable or which move him in undesirable ways unless some item is found, bombs, monsters, spies who take Chip's items, the time clock, and the levels themselves, which are often maze-like logic puzzles.
 
