@@ -50,15 +50,15 @@ The game logic will be written in JavaScript, with jQuery to handle DOM manipula
 
 In order to make the code easily digestible and editable/debuggable, I anticipate breaking game logic into the following files, using the Node module Webpack to bundle the files into one script:
 
-- main.js: the Webpack entry file. Finds the (only) DOM element in the index.html and assigns it to a new Game instance.
+- **main.js**: the Webpack entry file. Finds the (only) DOM element in the index.html and assigns it to a new Game instance.
 
-- game.js: handles gameplay. Instantiates the Board, installs onkeydown, onclick listeners, and moves the board's field of view/pauses the game accordingly.
+- **game.js**: handles gameplay. Instantiates the Board, installs onkeydown, onclick listeners, and moves the board's field of view/pauses the game accordingly.
 
-- board.js: the map. A new instance contains floor types, items (each instances of their own classes) and Chip (pretty much also an item) at game start.
+- **board.js**: the map. A new instance contains floor types, items (each instances of their own classes) and Chip (pretty much also an item) at game start.
 
-- floors.js: tile, wall, key-wall (door), chips, chip collector, help icon, complete-level portal. In later levels: water, fire, ice, force-field, blocks, spies.
+- **floors.js**: tile, wall, key-wall (door), chips, chip collector, help icon, complete-level portal. In later levels: water, fire, ice, force-field, blocks, spies.
 
-- items.js: most of the items, monsters, and Chip himself have one function, which is why this game isn't too completely out of the realm of possibility for a four-day project (also I'm only doing level 1). Thus, classes will be grouped together here until they become large enough to need their own file.
+- **items.js**: most of the items, monsters, and Chip himself have one function, which is why this game isn't too completely out of the realm of possibility for a four-day project (also I'm only doing level 1). Thus, classes will be grouped together here until they become large enough to need their own file.
 
 ### Implementation Timeline
 
