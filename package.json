@@ -1,0 +1,27 @@
+{
+  "name": "js_frontend",
+  "version": "1.0.0",
+  "description": "A clone of the first level of the 1991 computer game Chips Challenge, created by Chuck Sommerville.",
+  "main": "bundle.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erhsparks/ChipsChallenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erhsparks/ChipsChallenge/issues"
+  },
+  "homepage": "https://github.com/erhsparks/ChipsChallenge#readme",
+  "dependencies": {
+    "webpack": "^1.13.3"
+  }
+}
