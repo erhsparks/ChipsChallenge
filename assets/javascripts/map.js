@@ -19,7 +19,7 @@ class LevelOneMap {
     .attr('height', this.numRows * (this.tileSize + 2));
 
     this.addGrid();
-    this.addWalls();
+    this.addDetail();
   }
 
   addGrid () {
@@ -31,30 +31,77 @@ class LevelOneMap {
         .attr('width', this.tileSize)
         .attr('height', this.tileSize)
         .style('fill', floors.regularFloor)
-        .style('stroke', 'gray');
+        .style('stroke', 'gray')
+        .attr('class', 'floorTile');
       }
     }
   }
 
-  addWalls () {
-    let walls = this.positions().walls;
-    walls.forEach(wallPos => {
-      let x = wallPos[0];
-      let y = wallPos[1];
+  addDetail () {
+    let mapDetails = this.startingPositions();
+    let mapItems = Object.keys(mapDetails);
 
-      this.gameMap.append('rect')
-      .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
-      .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
-      .attr('width', this.tileSize)
-      .attr('height', this.tileSize)
-      .style('fill', floors.wall)
-      .style('stroke', 'gray');
+    mapItems.forEach(tileType => {
+      mapDetails[tileType].forEach(tilePos => {
+        let x = tilePos[0];
+        let y = tilePos[1];
+
+        this.gameMap.append('rect')
+        .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
+        .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
+        .attr('width', this.tileSize)
+        .attr('height', this.tileSize)
+        .style('fill', floors[tileType])
+        .style('stroke', 'gray')
+        .attr('class', tileType);
+      });
     });
   }
 
-  positions () {
+  startingPositions () {
     return (
       {
+        chip: [
+          [10, 9]
+        ],
+        winPortal: [
+          [10, 5]
+        ],
+        chipCollector: [
+          [10, 6]
+        ],
+        help: [
+          [10, 8]
+        ],
+        greenDoors: [
+          [8, 6], [12, 6]
+        ],
+        greenKeys: [
+          [11, 15]
+        ],
+        blueDoors: [
+          [7, 7], [13, 11]
+        ],
+        blueKeys: [
+          [8, 8], [8, 10]
+        ],
+        redDoors: [
+          [13, 7], [7, 11]
+        ],
+        redKeys: [
+          [12, 8], [12, 10]
+        ],
+        yellowDoors: [
+          [9, 12], [11, 12]
+        ],
+        yellowKeys: [
+          [5, 7], [15, 7]
+        ],
+        chips: [
+          [7, 5], [13, 5], [5, 10], [15, 10],
+          [8, 9], [12, 9], [5, 10], [15, 10],
+          [10, 11], [9, 14], [11, 14]
+        ],
         walls: [
           [5, 3], [6, 3], [7, 3], [8, 3], [9, 3],
           [11, 3], [12, 3], [13, 3], [14, 3], [15, 3],
