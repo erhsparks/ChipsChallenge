@@ -1,0 +1,59 @@
+.regularFloor {
+  fill: lightgray;
+}
+
+.chip {
+  fill: brown;
+}
+
+.winPortal {
+  fill: blue;
+}
+
+.chipCollector {
+  fill: gold;
+}
+
+.help {
+  fill: yellow;
+}
+
+.redDoors {
+  fill: red;
+}
+
+.redKeys {
+  fill: red;
+}
+
+.blueDoors {
+  fill: cyan;
+}
+
+.blueKeys {
+  fill: cyan;
+}
+
+.greenDoors {
+  fill: lime;
+}
+
+.greenKeys {
+  fill: lime;
+}
+
+.yellowDoors {
+  fill: yellow;
+}
+
+.yellowKeys {
+  fill: yellow;
+}
+
+.chips {
+  fill: darkgray;
+}
+
+.wall {
+  fill: gray;
+}

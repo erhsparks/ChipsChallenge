@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
-import * as floors from './tiles';
-import * as items from './items';
+import * as tileDetail from './tiles';
+import * as itemDetail from './items';
 
 class LevelOneMap {
   constructor (root) {
@@ -19,7 +19,8 @@ class LevelOneMap {
     .attr('height', this.numRows * (this.tileSize + 2));
 
     this.addGrid();
-    this.addDetail();
+    this.addTiles();
+    this.addItems();
   }
 
   addGrid () {
@@ -30,19 +31,19 @@ class LevelOneMap {
         .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
         .attr('width', this.tileSize)
         .attr('height', this.tileSize)
-        .style('fill', floors.regularFloor)
+        .style('fill', tileDetail.regularFloor)
         .style('stroke', 'gray')
         .attr('class', 'floorTile');
       }
     }
   }
 
-  addDetail () {
-    let mapDetails = this.startingPositions();
-    let mapItems = Object.keys(mapDetails);
+  addTiles () {
+    let tileStarts = this.tileStartingPositions();
+    let tiles = Object.keys(tileStarts);
 
-    mapItems.forEach(tileType => {
-      mapDetails[tileType].forEach(tilePos => {
+    tiles.forEach(tileType => {
+      tileStarts[tileType].forEach(tilePos => {
         let x = tilePos[0];
         let y = tilePos[1];
 
@@ -51,27 +52,42 @@ class LevelOneMap {
         .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
         .attr('width', this.tileSize)
         .attr('height', this.tileSize)
-        .style('fill', floors[tileType])
+        .style('fill', tileDetail[tileType])
         .style('stroke', 'gray')
+        .attr('font-size', this.tileSize / 2)
         .attr('class', tileType);
       });
     });
   }
 
-  startingPositions () {
+  addItems () {
+    let mapItems = this.itemStartingPositions();
+    let items = Object.keys(mapItems);
+
+    items.forEach(itemType => {
+      mapItems[itemType].forEach(itemPos => {
+        let x = itemPos[0];
+        let y = itemPos[1];
+
+        this.gameMap.append('text')
+        .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
+        .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
+        .attr('dy', (this.tileSize / 1.5))
+        .text(itemDetail[itemType])
+        .attr('font-size', this.tileSize / 2)
+        .attr('class', itemType);
+      });
+    });
+  }
+
+  itemStartingPositions () {
     return (
       {
         chip: [
           [10, 9]
         ],
-        winPortal: [
-          [10, 5]
-        ],
         chipCollector: [
           [10, 6]
-        ],
-        help: [
-          [10, 8]
         ],
         greenDoors: [
           [8, 6], [12, 6]
@@ -101,6 +117,19 @@ class LevelOneMap {
           [7, 5], [13, 5], [5, 10], [15, 10],
           [8, 9], [12, 9], [5, 10], [15, 10],
           [10, 11], [9, 14], [11, 14]
+        ]
+      }
+    );
+  }
+
+  tileStartingPositions () {
+    return (
+      {
+        winPortal: [
+          [10, 5]
+        ],
+        help: [
+          [10, 8]
         ],
         walls: [
           [5, 3], [6, 3], [7, 3], [8, 3], [9, 3],
