@@ -93,12 +93,12 @@ class ChipsChallenge {
     items.forEach(itemName => {
       d3.selectAll(itemName).each(function () {
         let item = this;
-        let itemX = item.x.baseVal.value;
-        let itemY = item.y.baseVal.value;
+        let itemX = item.x.baseVal[0].value;
+        let itemY = item.y.baseVal[0].value;
         if (x === itemX && y === itemY) {
           chipsItems.push(itemName);
           console.log(chipsItems);
-          d3.exit(this);
+          item.remove();
         }
       });
     });
