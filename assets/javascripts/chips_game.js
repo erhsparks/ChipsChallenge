@@ -4,11 +4,7 @@ import LevelOneMap from './map';
 class ChipsChallenge {
   constructor () {
     this.gameMap = new LevelOneMap();
-
     this.listenforArrowKeys();
-    this.handleKeypress = this.handleKeypress.bind(this);
-    // this.chipCanMove = this.chipCanMove.bind(this);
-    this.moveChip = this.moveChip.bind(this);
   }
 
   listenforArrowKeys () {
