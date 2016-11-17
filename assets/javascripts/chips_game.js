@@ -7,7 +7,10 @@ class ChipsChallenge {
     this.timeLeft = this.gameMap.timeLeft;
     this.chipsLeft = this.gameMap.chipsLeft;
     this.chipHasItems = [];
+    this.won = false;
+
     this.listenforArrowKeys();
+
   }
 
   listenforArrowKeys () {
@@ -18,6 +21,11 @@ class ChipsChallenge {
   handleKeypress (key, upOrDown) {
     let arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
     if (arrowKeys.includes(key)) this.moveChip(key);
+
+    if (this.won) {
+      console.log('you win!');
+      this.won = false;
+    }
   }
 
   moveChip (direction) {
@@ -30,30 +38,26 @@ class ChipsChallenge {
       case 'ArrowUp':
         y -= dXY;
         if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
-        console.log(this.didWeWin(x, y));
-        this.checkForItems(x, y);
         break;
       case 'ArrowDown':
         y += dXY;
         if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
-        this.didWeWin(x, y);
-        this.checkForItems(x, y);
         break;
       case 'ArrowLeft':
         x -= dXY;
         if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
-        this.didWeWin(x, y);
-        this.checkForItems(x, y);
         break;
       case 'ArrowRight':
         x += dXY;
         if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
-        this.didWeWin(x, y);
-        this.checkForItems(x, y);
         break;
       default:
         break;
     }
+
+    if (this.didWeWin(x, y)) {
+      this.won = true;
+    } else this.checkForItems(x, y);
   }
 
   chipCanMove (x, y) {
