@@ -11,6 +11,9 @@ class LevelOneMap {
     this.tileSize = 40;
 
     this.makeMap(root);
+
+    this.chipsLeft = this.itemStartingPositions().computerChips.length;
+    this.timeLeft = 99000; //99 seconds
   }
 
   makeMap (root) {
@@ -91,6 +94,9 @@ class LevelOneMap {
         chipOurHero: [
           [10, 9]
         ],
+        help: [
+          [10, 8]
+        ],
         chipCollector: [
           [10, 6]
         ],
@@ -132,9 +138,6 @@ class LevelOneMap {
       {
         winPortal: [
           [10, 5]
-        ],
-        help: [
-          [10, 8]
         ],
         walls: [
           [5, 3], [6, 3], [7, 3], [8, 3], [9, 3],

@@ -1,7 +1,7 @@
-export const chipOurHero = 'Chip';
-
-export const computerChips = 'chip';
-export const chipCollector = 'Collector';
+export const chipOurHero = ' o.o';
+export const help = '  ?';
+export const computerChips = ' [+]';
+export const chipCollector = ' |-|-|';
 
 export const redDoors = '[🔑]';
 export const blueDoors = '[🔑]';

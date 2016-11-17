@@ -4,6 +4,9 @@ import LevelOneMap from './map';
 class ChipsChallenge {
   constructor () {
     this.gameMap = new LevelOneMap();
+    this.timeLeft = this.gameMap.timeLeft;
+    this.chipsLeft = this.gameMap.chipsLeft;
+    this.chipHasItems = [];
     this.listenforArrowKeys();
   }
 
@@ -27,18 +30,26 @@ class ChipsChallenge {
       case 'ArrowUp':
         y -= dXY;
         if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
+        console.log(this.didWeWin(x, y));
+        this.checkForItems(x, y);
         break;
       case 'ArrowDown':
         y += dXY;
         if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
+        this.didWeWin(x, y);
+        this.checkForItems(x, y);
         break;
       case 'ArrowLeft':
         x -= dXY;
         if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
+        this.didWeWin(x, y);
+        this.checkForItems(x, y);
         break;
       case 'ArrowRight':
         x += dXY;
         if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
+        this.didWeWin(x, y);
+        this.checkForItems(x, y);
         break;
       default:
         break;
@@ -59,6 +70,34 @@ class ChipsChallenge {
     });
 
     return canHe;
+  }
+
+  didWeWin (x, y) {
+    let portal = d3.selectAll('.winPortal');
+    let portalX = parseInt(portal.attr('x'));
+    let portalY = parseInt(portal.attr('y'));
+
+    return (x === portalX && y === portalY) ? true : false;
+  }
+
+  checkForItems (x, y) {
+    let items = [
+      '.computerChips', '.redKeys', '.blueKeys',
+      '.greenKeys', '.yellowKeys'
+    ];
+    let chipsItems = this.chipHasItems;
+    items.forEach(itemName => {
+      d3.selectAll(itemName).each(function () {
+        let item = this;
+        let itemX = item.x.baseVal.value;
+        let itemY = item.y.baseVal.value;
+        if (x === itemX && y === itemY) {
+          chipsItems.push(itemName);
+          console.log(chipsItems);
+          d3.exit(this);
+        }
+      });
+    });
   }
 }
 
