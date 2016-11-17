@@ -5,13 +5,13 @@ class ChipsChallenge {
   constructor() {
     this.gameMap = new LevelOneMap();
 
-    this.listenforKeyPresses();
+    this.listenforArrowKeys();
     this.handleKeypress = this.handleKeypress.bind(this);
     this.moveChip = this.moveChip.bind(this);
   }
 
-  listenforKeyPresses() {
-    var arrowKeysPressed = {
+  listenforArrowKeys() {
+    this.arrowKeysPressed = {
       ArrowUp: false,
       ArrowDown: false,
       ArrowLeft: false,
@@ -19,38 +19,26 @@ class ChipsChallenge {
     };
 
     d3.select('body')
-      .on('keydown', () => {
-        let key = d3.event.key;
-        if (Object.keys(arrowKeysPressed).includes(key)) {
-          arrowKeysPressed[key] = true;
-          this.moveChip();
-        }
-      })
-      .on('keyup', () => {
-        let key = d3.event.key;
-        if (Object.keys(arrowKeysPressed).includes(key)) {
-          arrowKeysPressed[d3.event.key] = false;
-          console.log('key released!');
-        }
-      });
+      .on('keydown', () => this.handleKeypress(d3.event.key, 'down'))
+      .on('keyup', () => this.handleKeypress(d3.event.key, 'up'));
   }
 
-  // handleKeypress(key, type) {
-  //   debugger
-  //   console.log(key);
-  //
-  //   var keyPressed = {};
-  //   switch (type) {
-  //     case 'down':
-  //       keyPressed[keyId] = true;
-  //       break;
-  //     case 'up':
-  //       keyPressed[keyId] = false;
-  //       break;
-  //     default:
-  //       console.log('not a keypress??');
-  //   }
-  // }
+  handleKeypress (key, upOrDown) {
+    if (Object.keys(this.arrowKeysPressed).includes(key)) {
+      switch (upOrDown) {
+        case 'down':
+          this.arrowKeysPressed[key] = true;
+          this.moveChip();
+          break;
+        case 'up':
+          this.arrowKeysPressed[key] = false;
+          console.log('key released!');
+          break;
+        default:
+          console.log('something else??');
+      }
+    }
+  }
 
   moveChip() {
     console.log("hooray, we're getting somewhere!");
