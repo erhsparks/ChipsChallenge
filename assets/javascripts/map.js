@@ -4,6 +4,8 @@ import * as itemDetail from './items';
 
 class LevelOneMap {
   constructor (root) {
+    this.gameObjects = {};
+
     this.numRows = 14 + 6;
     this.numCols = 15 + 6;
     this.tileSize = 40;
@@ -69,13 +71,16 @@ class LevelOneMap {
         let x = itemPos[0];
         let y = itemPos[1];
 
-        this.gameMap.append('text')
+        let item = this.gameMap.append('text')
         .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
         .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
         .attr('dy', (this.tileSize / 1.5))
         .text(itemDetail[itemType])
         .attr('font-size', this.tileSize / 2)
         .attr('class', itemType);
+
+        this.gameObjects[itemType] = [];
+        this.gameObjects[itemType].push(item);
       });
     });
   }
@@ -83,7 +88,7 @@ class LevelOneMap {
   itemStartingPositions () {
     return (
       {
-        chip: [
+        chipOurHero: [
           [10, 9]
         ],
         chipCollector: [
@@ -113,7 +118,7 @@ class LevelOneMap {
         yellowKeys: [
           [5, 7], [15, 7]
         ],
-        chips: [
+        computerChips: [
           [7, 5], [13, 5], [5, 10], [15, 10],
           [8, 9], [12, 9], [5, 10], [15, 10],
           [10, 11], [9, 14], [11, 14]
