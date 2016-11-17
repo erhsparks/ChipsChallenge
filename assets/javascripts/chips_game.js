@@ -6,7 +6,12 @@ class ChipsChallenge {
     this.gameMap = new LevelOneMap();
     this.timeLeft = this.gameMap.timeLeft;
     this.chipsLeft = this.gameMap.chipsLeft;
-    this.chipHasItems = [];
+    this.chipHasItems = {
+      '.redKeys': 0,
+      '.blueKeys': 0,
+      '.yellowKeys': 0,
+      '.greenKeys': 0
+    };
     this.won = false;
 
     this.listenforArrowKeys();
@@ -51,8 +56,6 @@ class ChipsChallenge {
         x += dXY;
         if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
         break;
-      default:
-        break;
     }
 
     if (this.didWeWin(x, y)) {
@@ -62,15 +65,49 @@ class ChipsChallenge {
 
   chipCanMove (x, y) {
     let canHe = true;
+    let chipsLeft = this.chipsLeft;
+    let chipsItems = this.chipHasItems;
 
-    d3.selectAll('.walls').each(function () {
-      let wall = this;
-      let wallX = wall.x.baseVal.value;
-      let wallY = wall.y.baseVal.value;
-      if (x === wallX && y === wallY) {
-        canHe = false;
+    let barrierNames = [
+      '.walls', '.chipCollector',
+      '.blueDoors', '.redDoors',
+      '.yellowDoors', '.greenDoors'
+    ];
+    barrierNames.forEach(barrierName => {
+      d3.selectAll(barrierName).each(function () {
+        let barrier = this;
+
+        let barrierX;
+        let barrierY;
+        if (barrierName === '.walls') {
+          barrierX = barrier.x.baseVal.value;
+          barrierY = barrier.y.baseVal.value;
+        } else {
+          barrierX = barrier.x.baseVal[0].value;
+          barrierY = barrier.y.baseVal[0].value;
+        }
+        if (x === barrierX && y === barrierY) {
+          switch (barrierName) {
+          case '.walls':
+            canHe = false;
+            break;
+          case '.chipCollector':
+            (chipsLeft === 0) ? barrier.remove() : canHe = false;
+            break;
+          default:
+            let color = barrierName.match(/(\..*)Doors/)[1];
+            if (chipsItems[`${color}Keys`] > 0) {
+              if (color !== '.green') chipsItems[`${color}Keys`] -= 1;
+              barrier.remove();
+              console.log(chipsItems);
+            } else canHe = false;
+            break;
+          }
         return;
-      }
+        }
+      });
+
+      if (!canHe) return false;
     });
 
     return canHe;
@@ -85,23 +122,32 @@ class ChipsChallenge {
   }
 
   checkForItems (x, y) {
-    let items = [
+    let chipsItems = this.chipHasItems;
+    let chipsLeft = this.chipsLeft;
+
+    let itemNames = [
       '.computerChips', '.redKeys', '.blueKeys',
       '.greenKeys', '.yellowKeys'
     ];
-    let chipsItems = this.chipHasItems;
-    items.forEach(itemName => {
+    itemNames.forEach(itemName => {
       d3.selectAll(itemName).each(function () {
         let item = this;
         let itemX = item.x.baseVal[0].value;
         let itemY = item.y.baseVal[0].value;
         if (x === itemX && y === itemY) {
-          chipsItems.push(itemName);
-          console.log(chipsItems);
+          if (itemName === '.computerChips') {
+            chipsLeft -= 1;
+            console.log(`Chips left: ${chipsLeft}`);
+          } else {
+            chipsItems[itemName] += 1;
+            console.log(chipsItems);
+          }
           item.remove();
         }
       });
     });
+
+    this.chipsLeft = chipsLeft;
   }
 }
 
