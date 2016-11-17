@@ -64,53 +64,63 @@ class ChipsChallenge {
   }
 
   chipCanMove (x, y) {
-    let canHe = true;
+    return !(this.isWallAt(x, y) || this.isBarrierAt(x, y));
+  }
+
+  isWallAt (x, y) {
+    let isWall = false;
+
+    d3.selectAll('.walls').each(function () {
+      let wall = this;
+      let wallX = wall.x.baseVal.value;
+      let wallY = wall.y.baseVal.value;
+
+      if (x === wallX && y === wallY) {
+        isWall = true;
+        return;
+      }
+    });
+
+    return isWall;
+  }
+
+  isBarrierAt (x, y) {
+    let isBarrier = false;
+
     let chipsLeft = this.chipsLeft;
     let chipsItems = this.chipHasItems;
 
     let barrierNames = [
-      '.walls', '.chipCollector',
+      '.chipCollector',
       '.blueDoors', '.redDoors',
       '.yellowDoors', '.greenDoors'
     ];
+
     barrierNames.forEach(barrierName => {
       d3.selectAll(barrierName).each(function () {
         let barrier = this;
+        let barrierX = barrier.x.baseVal[0].value;
+        let barrierY = barrier.y.baseVal[0].value;
 
-        let barrierX;
-        let barrierY;
-        if (barrierName === '.walls') {
-          barrierX = barrier.x.baseVal.value;
-          barrierY = barrier.y.baseVal.value;
-        } else {
-          barrierX = barrier.x.baseVal[0].value;
-          barrierY = barrier.y.baseVal[0].value;
-        }
         if (x === barrierX && y === barrierY) {
-          switch (barrierName) {
-          case '.walls':
-            canHe = false;
-            break;
-          case '.chipCollector':
-            (chipsLeft === 0) ? barrier.remove() : canHe = false;
-            break;
-          default:
-            let color = barrierName.match(/(\..*)Doors/)[1];
-            if (chipsItems[`${color}Keys`] > 0) {
-              if (color !== '.green') chipsItems[`${color}Keys`] -= 1;
+          if (barrierName === '.chipCollector') {
+            (chipsLeft === 0) ? barrier.remove() : isBarrier = true;
+          } else {
+            let color = barrierName.match(/\.(.*)Doors/)[1];
+            if (chipsItems[`.${color}Keys`] > 0) {
+              if (color !== 'green') chipsItems[`.${color}Keys`] -= 1;
               barrier.remove();
               console.log(chipsItems);
-            } else canHe = false;
-            break;
+            } else isBarrier = true;
           }
-        return;
+          return;
         }
+
+        if (isBarrier) return;
       });
-
-      if (!canHe) return false;
+      if (isBarrier) return;
     });
-
-    return canHe;
+    return isBarrier;
   }
 
   didWeWin (x, y) {
