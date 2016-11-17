@@ -2,15 +2,16 @@ import * as d3 from "d3";
 import LevelOneMap from './map';
 
 class ChipsChallenge {
-  constructor() {
+  constructor () {
     this.gameMap = new LevelOneMap();
 
     this.listenforArrowKeys();
     this.handleKeypress = this.handleKeypress.bind(this);
+    // this.chipCanMove = this.chipCanMove.bind(this);
     this.moveChip = this.moveChip.bind(this);
   }
 
-  listenforArrowKeys() {
+  listenforArrowKeys () {
     d3.select('body')
       .on('keydown', () => this.handleKeypress(d3.event.key));
   }
@@ -20,7 +21,7 @@ class ChipsChallenge {
     if (arrowKeys.includes(key)) this.moveChip(key);
   }
 
-  moveChip(direction) {
+  moveChip (direction) {
     let chip = this.gameMap.gameObjects.chipOurHero[0];
     let x = parseInt(chip.attr('x'));
     let y = parseInt(chip.attr('y'));
@@ -29,23 +30,39 @@ class ChipsChallenge {
     switch (direction) {
       case 'ArrowUp':
         y -= dXY;
-        chip.attr('y', `${y}`);
+        if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
         break;
       case 'ArrowDown':
         y += dXY;
-        chip.attr('y', `${y}`);
+        if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
         break;
       case 'ArrowLeft':
         x -= dXY;
-        chip.attr('x', `${x}`);
+        if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
         break;
       case 'ArrowRight':
         x += dXY;
-        chip.attr('x', `${x}`);
+        if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
         break;
       default:
-
+        break;
     }
+  }
+
+  chipCanMove (x, y) {
+    let canHe = true;
+
+    d3.selectAll('.walls').each(function () {
+      let wall = this;
+      let wallX = wall.x.baseVal.value;
+      let wallY = wall.y.baseVal.value;
+      if (x === wallX && y === wallY) {
+        canHe = false;
+        return;
+      }
+    });
+
+    return canHe;
   }
 }
 
