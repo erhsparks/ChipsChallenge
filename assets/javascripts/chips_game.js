@@ -12,10 +12,9 @@ class ChipsChallenge {
       '.yellowKeys': 0,
       '.greenKeys': 0
     };
+
     this.won = false;
-
     this.listenforArrowKeys();
-
   }
 
   listenforArrowKeys () {
@@ -71,9 +70,9 @@ class ChipsChallenge {
     let isWall = false;
 
     d3.selectAll('.walls').each(function () {
-      let wall = this;
-      let wallX = wall.x.baseVal.value;
-      let wallY = wall.y.baseVal.value;
+      let wall = d3.select(this);
+      let wallX = parseInt(wall.attr('x'));
+      let wallY = parseInt(wall.attr('y'));
 
       if (x === wallX && y === wallY) {
         isWall = true;
@@ -98,9 +97,9 @@ class ChipsChallenge {
 
     barrierNames.forEach(barrierName => {
       d3.selectAll(barrierName).each(function () {
-        let barrier = this;
-        let barrierX = barrier.x.baseVal[0].value;
-        let barrierY = barrier.y.baseVal[0].value;
+        let barrier = d3.select(this);
+        let barrierX = parseInt(barrier.attr('x'));
+        let barrierY = parseInt(barrier.attr('y'));
 
         if (x === barrierX && y === barrierY) {
           if (barrierName === '.chipCollector') {
@@ -110,7 +109,6 @@ class ChipsChallenge {
             if (chipsItems[`.${color}Keys`] > 0) {
               if (color !== 'green') chipsItems[`.${color}Keys`] -= 1;
               barrier.remove();
-              console.log(chipsItems);
             } else isBarrier = true;
           }
           return;
@@ -147,10 +145,8 @@ class ChipsChallenge {
         if (x === itemX && y === itemY) {
           if (itemName === '.computerChips') {
             chipsLeft -= 1;
-            console.log(`Chips left: ${chipsLeft}`);
           } else {
             chipsItems[itemName] += 1;
-            console.log(chipsItems);
           }
           item.remove();
         }
