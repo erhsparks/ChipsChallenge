@@ -74,7 +74,7 @@ class ChipsChallenge {
       let chip = this.gameMap.gameObjects.chipOurHero[0];
       chip.style('fill', `url(#chip_down)`);
       let winTime = this.gameMap.timeLeft - this.timeLeft;
-      winBox();
+      winBox(winTime);
 
       clearInterval(this.gameTimer);
       this.won = false;

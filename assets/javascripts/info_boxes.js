@@ -50,9 +50,11 @@ export const helpBox = () => {
   makeBox(message);
 };
 
-export const winBox = () => {
+export const winBox = (winTime) => {
   let message = [
-    'Yowzer!',
+    'Yowzer! you',
+    'beat the level',
+    `in ${winTime} seconds!`,
     ' ',
     'Great work!'
   ];
