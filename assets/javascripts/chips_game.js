@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import LevelOneMap from './map';
+import InfoPane from './info_pane';
 
 class ChipsChallenge {
   constructor () {
@@ -13,8 +14,31 @@ class ChipsChallenge {
       '.greenKeys': 0
     };
 
+    this.gameInfo = new InfoPane(
+      this.timeLeft,
+      this.chipsLeft,
+      this.chipHasItems
+    );
+
     this.won = false;
+    this.outOfTime = false;
+    this.firstMove = true;
     this.listenforArrowKeys();
+  }
+
+  startTimer() {
+    this.gameTimer = window.setInterval(() => {
+      if (this.timeLeft > 0) {
+        console.log(this.timeLeft);
+        this.timeLeft -= 1;
+      } else {
+        console.log(this.timeLeft);
+        this.outOfTime = true;
+        alert('Oops, out of time!');
+        this.keysToListenFor = [];
+        clearInterval(this.gameTimer);
+      }
+    }, 1000);
   }
 
   listenforArrowKeys () {
@@ -24,18 +48,29 @@ class ChipsChallenge {
     ];
 
     d3.select('body')
-      .on('keydown', () => this.handleKeypress(d3.event.key))
-      .on('keyup', () => this.handleIfWon());
+      .on('keydown', () => this.handleKeypress(d3.event))
+      .on('keyup', () => this.handleWin());
   }
 
-  handleKeypress (key, upOrDown) {
-    let arrowKeys = this.keysToListenFor;
-    if (arrowKeys.includes(key)) this.moveChip(key);
+  handleKeypress (event) {
+    if (this.keysToListenFor.includes(event.key)) {
+      event.preventDefault();
+
+      if (this.firstMove) {
+        this.startTimer();
+        this.firstMove = false;
+      }
+
+      this.moveChip(event.key);
+    }
   }
 
-  handleIfWon () {
+  handleWin () {
     if (this.won) {
-      alert('you win!');
+      let winTime = this.gameMap.timeLeft - this.timeLeft;
+      alert(`Onwards! You won in ${winTime} seconds!`);
+
+      clearInterval(this.gameTimer);
       this.won = false;
       this.keysToListenFor = [];
     }
@@ -149,8 +184,8 @@ class ChipsChallenge {
     itemNames.forEach(itemName => {
       d3.selectAll(itemName).each(function () {
         let item = this;
-        let itemX = item.x.baseVal[0].value;
-        let itemY = item.y.baseVal[0].value;
+        let itemX = item.x.baseVal.value;
+        let itemY = item.y.baseVal.value;
         if (x === itemX && y === itemY) {
           if (itemName === '.computerChips') {
             chipsLeft -= 1;

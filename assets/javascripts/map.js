@@ -7,37 +7,64 @@ class LevelOneMap {
     this.gameObjects = {};
 
     this.numRows = 14 + 6;
+    this.visibleRows = 9;
     this.numCols = 15 + 6;
+    this.visibleCols = 9;
     this.tileSize = 40;
 
     this.makeMap(root);
 
     this.chipsLeft = this.itemStartingPositions().computerChips.length;
-    this.timeLeft = 99000; //99 seconds
+    this.timeLeft = 99;
   }
 
   makeMap (root) {
     this.gameMap = d3.select('body')
     .append('svg')
     .attr('class', 'game-map')
-    .attr('width', this.numCols * (this.tileSize + 2))
-    .attr('height', this.numRows * (this.tileSize + 2));
+    .attr('width', this.numCols * this.tileSize)
+    .attr('height', this.numRows * this.tileSize);
+    // .attr('width', this.visibleCols * this.tileSize)
+    // .attr('height', this.visibleRows * this.tileSize);
 
     this.addGrid();
     this.addTiles();
     this.addItems();
+
+    // this.chipNode = this.gameMap.select('.chipOurHero');
+    // let chipX = this.chipNode.attr('x');
+    // let chipY = this.chipNode.attr('y');
+    // this.gameMap.attr('x', chipX).attr('y', chipY);
+  }
+
+  makeImageDef (nameString) {
+    let defs = this.gameMap.append('svg:defs');
+
+    defs.append('svg:pattern')
+    .attr('id', `${nameString}`)
+    .attr('width', this.tileSize)
+    .attr('height', this.tileSize)
+    .attr("patternUnits", "userSpaceOnUse")
+    .append("svg:image")
+    .attr("xlink:href", `assets/images/${nameString}.png`)
+    .attr("width", this.tileSize)
+    .attr("height", this.tileSize)
+    .attr("x", 0)
+    .attr("y", 0);
   }
 
   addGrid () {
+    let nameString = tileDetail.regularFloor;
+    this.makeImageDef(nameString);
+
     for (let y = 0; y < this.numRows; y++) {
       for (let x = 0; x < this.numCols; x++) {
         this.gameMap.append('rect')
-        .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
-        .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
+        .attr('x', x * this.tileSize)
+        .attr('y', y * this.tileSize)
         .attr('width', this.tileSize)
         .attr('height', this.tileSize)
-        .style('fill', tileDetail.regularFloor)
-        .style('stroke', 'gray')
+        .style('fill', `url(#${nameString})`)
         .attr('class', 'floorTile');
       }
     }
@@ -48,18 +75,19 @@ class LevelOneMap {
     let tiles = Object.keys(tileStarts);
 
     tiles.forEach(tileType => {
+      let nameString = tileDetail[tileType];
+      this.makeImageDef(nameString);
+
       tileStarts[tileType].forEach(tilePos => {
         let x = tilePos[0];
         let y = tilePos[1];
 
         this.gameMap.append('rect')
-        .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
-        .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
+        .attr('x', x * this.tileSize)
+        .attr('y', y * this.tileSize)
         .attr('width', this.tileSize)
         .attr('height', this.tileSize)
-        .style('fill', tileDetail[tileType])
-        .style('stroke', 'gray')
-        .attr('font-size', this.tileSize / 2)
+        .style('fill', `url(#${nameString})`)
         .attr('class', tileType);
       });
     });
@@ -70,16 +98,19 @@ class LevelOneMap {
     let items = Object.keys(mapItems);
 
     items.forEach(itemType => {
+      let nameString = itemDetail[itemType];
+      this.makeImageDef(nameString);
+
       mapItems[itemType].forEach(itemPos => {
         let x = itemPos[0];
         let y = itemPos[1];
 
-        let item = this.gameMap.append('text')
-        .attr('x', (this.tileSize / 2 + x * (this.tileSize)))
-        .attr('y', (this.tileSize / 2 + y * (this.tileSize)))
-        .attr('dy', (this.tileSize / 1.5))
-        .text(itemDetail[itemType])
-        .attr('font-size', this.tileSize / 2)
+        let item = this.gameMap.append('rect')
+        .attr('x', x * this.tileSize)
+        .attr('y', y * this.tileSize)
+        .attr('width', this.tileSize)
+        .attr('height', this.tileSize)
+        .style('fill', `url(#${nameString})`)
         .attr('class', itemType);
 
         this.gameObjects[itemType] = [];

@@ -1,14 +1,14 @@
-export const chipOurHero = ' o.o';
-export const help = '  ?';
-export const computerChips = ' [+]';
-export const chipCollector = ' |-|-|';
+export const chipOurHero = 'chip_down';
+export const help = 'help';
+export const computerChips = 'chip';
+export const chipCollector = 'chip_collector';
 
-export const redDoors = '[🔑]';
-export const blueDoors = '[🔑]';
-export const greenDoors = '[🔑]';
-export const yellowDoors = '[🔑]';
+export const redDoors = 'red_door';
+export const blueDoors = 'blue_door';
+export const greenDoors = 'green_door';
+export const yellowDoors = 'yellow_door';
 
-export const redKeys = '🔑R';
-export const blueKeys = '🔑B';
-export const greenKeys = '🔑G';
-export const yellowKeys = '🔑Y';
+export const redKeys = 'red_key';
+export const blueKeys = 'blue_key';
+export const greenKeys = 'yellow_key';
+export const yellowKeys = 'green_key';

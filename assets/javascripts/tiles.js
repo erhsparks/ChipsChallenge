@@ -1,3 +1,3 @@
-export const regularFloor = 'lightgray';
-export const walls = 'gray';
-export const winPortal = 'blue';
+export const regularFloor = 'regular_floor';
+export const walls = 'wall';
+export const winPortal = 'win_portal';
