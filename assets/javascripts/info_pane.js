@@ -27,23 +27,27 @@ class InfoPane {
   }
 
   addInfoValues () {
+    this.oneDigit = 105;
+    this.twoDigit = 85;
+    this.threeDigit = 65;
+
     this.infoPane.append('text')
-    .attr('x', 105)
+    .attr('x', this.oneDigit)
     .attr('y', 72)
     .text(`1`)
     .attr('class', 'info-pane-values');
 
     this.infoPane.append('text')
-    .attr('x', 85)
+    .attr('x', this.threeDigit)
     .attr('y', 150)
     .text(`${this.timeLeft}`)
-    .attr('class', 'info-pane-values');
+    .attr('class', 'info-pane-values time-left');
 
     this.infoPane.append('text')
-    .attr('x', 85)
+    .attr('x', this.twoDigit)
     .attr('y', 265)
     .text(`${this.chipsLeft}`)
-    .attr('class', 'info-pane-values');
+    .attr('class', 'info-pane-values chips-left');
   }
 
   addInfoText () {
@@ -72,21 +76,58 @@ class InfoPane {
     .attr('class', 'info-pane-text');
   }
 
-  // addItemGrid () {
-  //   let nameString = tileDetail.regularFloor;
-  //   for (let i = 7; i < 9; i++) {
-  //     for (let j = 1; j < 5; j++) {
-  //       this.infoPane.append('rect')
-  //       .attr('width', this.tileSize)
-  //       .attr('height', this.tileSize)
-  //       .attr('x', j * this.tileSize)
-  //       .attr('y', i * this.tileSize)
-  //       .style('fill', `url(#${nameString})`);
-  //
-  //       // r b y g
-  //     }
-  //   }
-  // }
+  updateChipsLeft () {
+    let chipsLeftNode = this.infoPane.select('.chips-left');
+    chipsLeftNode.text(this.chipsLeft);
+
+    if (this.chipsLeft < 10) {
+      chipsLeftNode.attr('x', this.oneDigit);
+      if (this.chipsLeft === 0) {
+        let currentClass = chipsLeftNode.attr('class');
+        let newClass = `${currentClass} none-left`;
+        chipsLeftNode.attr('class', newClass);
+      }
+    }
+  }
+
+  updateTimeLeft () {
+    let timeLeftNode = this.infoPane.select('.time-left');
+    timeLeftNode.text(this.timeLeft);
+
+    if (this.timeLeft < 100 && this.timeLeft >= 10) {
+      timeLeftNode.attr('x', this.twoDigit);
+    } else if (this.timeLeft < 10) {
+      timeLeftNode.attr('x', this.oneDigit);
+      if (this.timeLeft === 0) {
+        let currentClass = timeLeftNode.attr('class');
+        let newClass = `${currentClass} none-left`;
+        timeLeftNode.attr('class', newClass);
+      }
+    }
+  }
+
+  updateItems () {
+    // currently not working but will eventually display
+    // the items that Chip has picked up.
+    
+    // console.log(this.chipHasItems);
+    // let chipsItems = this.chipHasItems;
+    //
+    //
+    // Object.keys(chipsItems).forEach((itemName, i) => {
+    //   if (chipsItems[itemName] > 0) {
+    //     itemName = itemName.slice(1);
+    //
+    //     this.infoPane.append('rect')
+    //     .attr('x', 17 + (i * this.tileSize))
+    //     .attr('y', 280)
+    //     .attr('width', this.tileSize)
+    //     .attr('height', this.tileSize)
+    //     .style('fill', `url(#blue_key)`)
+    //     .attr('class', `has-${itemName}`);
+    //   }
+    // });
+  }
 }
 
 export default InfoPane;

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import LevelOneMap from './map';
 import InfoPane from './info_pane';
-import { helpBox, winBox, loseBox } from './info_boxes';
+import { helpBox, winBox, outOfTimeBox } from './info_boxes';
 
 class ChipsChallenge {
   constructor () {
@@ -15,11 +15,12 @@ class ChipsChallenge {
       '.greenKeys': 0
     };
 
-    this.gameInfo = new InfoPane(
+    this.infoPane = new InfoPane(
       this.timeLeft,
       this.chipsLeft,
       this.chipHasItems
     );
+    this.infoPaneNode = d3.select('.info-pane');
 
     this.won = false;
     this.outOfTime = false;
@@ -30,12 +31,12 @@ class ChipsChallenge {
   startTimer() {
     this.gameTimer = window.setInterval(() => {
       if (this.timeLeft > 0) {
-        console.log(this.timeLeft);
         this.timeLeft -= 1;
+        this.infoPane.timeLeft = this.timeLeft;
+        this.infoPane.updateTimeLeft();
       } else {
-        console.log(this.timeLeft);
         this.outOfTime = true;
-        alert('Oops, out of time!');
+        outOfTimeBox();
         this.keysToListenFor = [];
         clearInterval(this.gameTimer);
       }
@@ -71,7 +72,7 @@ class ChipsChallenge {
       let chip = this.gameMap.gameObjects.chipOurHero[0];
       chip.style('fill', `url(#chip_down)`);
       let winTime = this.gameMap.timeLeft - this.timeLeft;
-      alert(`Onwards! You won in ${winTime} seconds!`);
+      winBox();
 
       clearInterval(this.gameTimer);
       this.won = false;
@@ -162,6 +163,8 @@ class ChipsChallenge {
     ];
 
     barrierNames.forEach(barrierName => {
+      let infoPane = this.infoPane;
+
       d3.selectAll(barrierName).each(function () {
         let barrier = d3.select(this);
         let barrierX = parseInt(barrier.attr('x'));
@@ -173,7 +176,10 @@ class ChipsChallenge {
           } else {
             let color = barrierName.match(/\.(.*)Doors/)[1];
             if (chipsItems[`.${color}Keys`] > 0) {
-              if (color !== 'green') chipsItems[`.${color}Keys`] -= 1;
+              if (color !== 'green') {
+                chipsItems[`.${color}Keys`] -= 1;
+                infoPane.updateItems();
+              }
               barrier.remove();
             } else isBarrier = true;
           }
@@ -198,6 +204,7 @@ class ChipsChallenge {
   checkForItems (x, y) {
     let chipsItems = this.chipHasItems;
     let chipsLeft = this.chipsLeft;
+    let infoPane = this.infoPane;
 
     let itemNames = [
       '.computerChips', '.redKeys', '.blueKeys',
@@ -212,9 +219,12 @@ class ChipsChallenge {
           if (itemName === '.computerChips') {
             item.remove();
             chipsLeft -= 1;
+            infoPane.chipsLeft = chipsLeft;
+            infoPane.updateChipsLeft();
           } else {
             item.remove();
             chipsItems[itemName] += 1;
+            infoPane.updateItems();
           }
         }
       });

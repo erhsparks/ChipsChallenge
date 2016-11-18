@@ -29,7 +29,7 @@ body {
 .info-text {
   font-family: sans-serif;
   font-size: 20px;
-  text-transform: uppercase;;
+  text-transform: uppercase;
 }
 
 .info-pane-text {
@@ -46,6 +46,10 @@ body {
   fill: #2bdb2d;
   font-weight: bold;
   font-size: 30px;
+}
+
+.info-pane-values.none-left {
+  fill: gold;
 }
 
 .regularFloor,

@@ -50,9 +50,22 @@ export const helpBox = () => {
 };
 
 export const winBox = () => {
-  makeBox('Yowzer! Great work, Chip!');
+  let message = [
+    'Yowzer!',
+    ' ',
+    'Great work!'
+  ];
+
+  makeBox(message);
 };
 
-export const loseBox = () => {
-  makeBox('Oh no! You ran out of time.');
+export const outOfTimeBox = () => {
+  let message = [
+    'Oh no!',
+    ' ',
+    'You ran out',
+    'of time!'
+  ];
+
+  makeBox(message);
 };

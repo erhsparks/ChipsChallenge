@@ -102,7 +102,8 @@
 	      '.greenKeys': 0
 	    };
 	
-	    this.gameInfo = new _info_pane2.default(this.timeLeft, this.chipsLeft, this.chipHasItems);
+	    this.infoPane = new _info_pane2.default(this.timeLeft, this.chipsLeft, this.chipHasItems);
+	    this.infoPaneNode = d3.select('.info-pane');
 	
 	    this.won = false;
 	    this.outOfTime = false;
@@ -117,12 +118,12 @@
 	
 	      this.gameTimer = window.setInterval(function () {
 	        if (_this.timeLeft > 0) {
-	          console.log(_this.timeLeft);
 	          _this.timeLeft -= 1;
+	          _this.infoPane.timeLeft = _this.timeLeft;
+	          _this.infoPane.updateTimeLeft();
 	        } else {
-	          console.log(_this.timeLeft);
 	          _this.outOfTime = true;
-	          alert('Oops, out of time!');
+	          (0, _info_boxes.outOfTimeBox)();
 	          _this.keysToListenFor = [];
 	          clearInterval(_this.gameTimer);
 	        }
@@ -162,7 +163,7 @@
 	        var chip = this.gameMap.gameObjects.chipOurHero[0];
 	        chip.style('fill', 'url(#chip_down)');
 	        var winTime = this.gameMap.timeLeft - this.timeLeft;
-	        alert('Onwards! You won in ' + winTime + ' seconds!');
+	        (0, _info_boxes.winBox)();
 	
 	        clearInterval(this.gameTimer);
 	        this.won = false;
@@ -241,6 +242,8 @@
 	  }, {
 	    key: 'isBarrierAt',
 	    value: function isBarrierAt(x, y) {
+	      var _this3 = this;
+	
 	      var isBarrier = false;
 	
 	      var chipsLeft = this.chipsLeft;
@@ -249,6 +252,8 @@
 	      var barrierNames = ['.chipSocket', '.blueDoors', '.redDoors', '.yellowDoors', '.greenDoors'];
 	
 	      barrierNames.forEach(function (barrierName) {
+	        var infoPane = _this3.infoPane;
+	
 	        d3.selectAll(barrierName).each(function () {
 	          var barrier = d3.select(this);
 	          var barrierX = parseInt(barrier.attr('x'));
@@ -260,7 +265,10 @@
 	            } else {
 	              var color = barrierName.match(/\.(.*)Doors/)[1];
 	              if (chipsItems['.' + color + 'Keys'] > 0) {
-	                if (color !== 'green') chipsItems['.' + color + 'Keys'] -= 1;
+	                if (color !== 'green') {
+	                  chipsItems['.' + color + 'Keys'] -= 1;
+	                  infoPane.updateItems();
+	                }
 	                barrier.remove();
 	              } else isBarrier = true;
 	            }
@@ -287,6 +295,7 @@
 	    value: function checkForItems(x, y) {
 	      var chipsItems = this.chipHasItems;
 	      var chipsLeft = this.chipsLeft;
+	      var infoPane = this.infoPane;
 	
 	      var itemNames = ['.computerChips', '.redKeys', '.blueKeys', '.greenKeys', '.yellowKeys'];
 	      itemNames.forEach(function (itemName) {
@@ -298,9 +307,12 @@
 	            if (itemName === '.computerChips') {
 	              item.remove();
 	              chipsLeft -= 1;
+	              infoPane.chipsLeft = chipsLeft;
+	              infoPane.updateChipsLeft();
 	            } else {
 	              item.remove();
 	              chipsItems[itemName] += 1;
+	              infoPane.updateItems();
 	            }
 	          }
 	        });
@@ -16768,7 +16780,7 @@
 	    this.makeMap(root);
 	
 	    this.chipsLeft = this.itemStartingPositions().computerChips.length;
-	    this.timeLeft = 99;
+	    this.timeLeft = 100;
 	  }
 	
 	  _createClass(LevelOneMap, [{
@@ -16977,11 +16989,15 @@
 	  }, {
 	    key: 'addInfoValues',
 	    value: function addInfoValues() {
-	      this.infoPane.append('text').attr('x', 105).attr('y', 72).text('1').attr('class', 'info-pane-values');
+	      this.oneDigit = 105;
+	      this.twoDigit = 85;
+	      this.threeDigit = 65;
 	
-	      this.infoPane.append('text').attr('x', 85).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values');
+	      this.infoPane.append('text').attr('x', this.oneDigit).attr('y', 72).text('1').attr('class', 'info-pane-values');
 	
-	      this.infoPane.append('text').attr('x', 85).attr('y', 265).text('' + this.chipsLeft).attr('class', 'info-pane-values');
+	      this.infoPane.append('text').attr('x', this.threeDigit).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values time-left');
+	
+	      this.infoPane.append('text').attr('x', this.twoDigit).attr('y', 265).text('' + this.chipsLeft).attr('class', 'info-pane-values chips-left');
 	    }
 	  }, {
 	    key: 'addInfoText',
@@ -16994,23 +17010,62 @@
 	
 	      this.infoPane.append('text').attr('x', 59).attr('y', 226).text('Left').attr('class', 'info-pane-text');
 	    }
+	  }, {
+	    key: 'updateChipsLeft',
+	    value: function updateChipsLeft() {
+	      var chipsLeftNode = this.infoPane.select('.chips-left');
+	      chipsLeftNode.text(this.chipsLeft);
 	
-	    // addItemGrid () {
-	    //   let nameString = tileDetail.regularFloor;
-	    //   for (let i = 7; i < 9; i++) {
-	    //     for (let j = 1; j < 5; j++) {
-	    //       this.infoPane.append('rect')
-	    //       .attr('width', this.tileSize)
-	    //       .attr('height', this.tileSize)
-	    //       .attr('x', j * this.tileSize)
-	    //       .attr('y', i * this.tileSize)
-	    //       .style('fill', `url(#${nameString})`);
-	    //
-	    //       // r b y g
-	    //     }
-	    //   }
-	    // }
+	      if (this.chipsLeft < 10) {
+	        chipsLeftNode.attr('x', this.oneDigit);
+	        if (this.chipsLeft === 0) {
+	          var currentClass = chipsLeftNode.attr('class');
+	          var newClass = currentClass + ' none-left';
+	          chipsLeftNode.attr('class', newClass);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'updateTimeLeft',
+	    value: function updateTimeLeft() {
+	      var timeLeftNode = this.infoPane.select('.time-left');
+	      timeLeftNode.text(this.timeLeft);
 	
+	      if (this.timeLeft < 100 && this.timeLeft >= 10) {
+	        timeLeftNode.attr('x', this.twoDigit);
+	      } else if (this.timeLeft < 10) {
+	        timeLeftNode.attr('x', this.oneDigit);
+	        if (this.timeLeft === 0) {
+	          var currentClass = timeLeftNode.attr('class');
+	          var newClass = currentClass + ' none-left';
+	          timeLeftNode.attr('class', newClass);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'updateItems',
+	    value: function updateItems() {
+	      // currently not working but will eventually display
+	      // the items that Chip has picked up.
+	
+	      // console.log(this.chipHasItems);
+	      // let chipsItems = this.chipHasItems;
+	      //
+	      //
+	      // Object.keys(chipsItems).forEach((itemName, i) => {
+	      //   if (chipsItems[itemName] > 0) {
+	      //     itemName = itemName.slice(1);
+	      //
+	      //     this.infoPane.append('rect')
+	      //     .attr('x', 17 + (i * this.tileSize))
+	      //     .attr('y', 280)
+	      //     .attr('width', this.tileSize)
+	      //     .attr('height', this.tileSize)
+	      //     .style('fill', `url(#blue_key)`)
+	      //     .attr('class', `has-${itemName}`);
+	      //   }
+	      // });
+	    }
 	  }]);
 	
 	  return InfoPane;
@@ -17029,7 +17084,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.loseBox = exports.winBox = exports.helpBox = undefined;
+	exports.outOfTimeBox = exports.winBox = exports.helpBox = undefined;
 	
 	var _d = __webpack_require__(2);
 	
@@ -17059,11 +17114,15 @@
 	};
 	
 	var winBox = exports.winBox = function winBox() {
-	  makeBox('Yowzer! Great work, Chip!');
+	  var message = ['Yowzer!', ' ', 'Great work!'];
+	
+	  makeBox(message);
 	};
 	
-	var loseBox = exports.loseBox = function loseBox() {
-	  makeBox('Oh no! You ran out of time.');
+	var outOfTimeBox = exports.outOfTimeBox = function outOfTimeBox() {
+	  var message = ['Oh no!', ' ', 'You ran out', 'of time!'];
+	
+	  makeBox(message);
 	};
 
 /***/ }

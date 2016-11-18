@@ -15,7 +15,7 @@ class LevelOneMap {
     this.makeMap(root);
 
     this.chipsLeft = this.itemStartingPositions().computerChips.length;
-    this.timeLeft = 99;
+    this.timeLeft = 100;
   }
 
   makeMap (root) {
