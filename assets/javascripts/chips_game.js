@@ -18,17 +18,26 @@ class ChipsChallenge {
   }
 
   listenforArrowKeys () {
+    this.keysToListenFor = [
+      'ArrowUp', 'ArrowDown',
+      'ArrowLeft', 'ArrowRight'
+    ];
+
     d3.select('body')
-      .on('keydown', () => this.handleKeypress(d3.event.key));
+      .on('keydown', () => this.handleKeypress(d3.event.key))
+      .on('keyup', () => this.handleIfWon());
   }
 
   handleKeypress (key, upOrDown) {
-    let arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+    let arrowKeys = this.keysToListenFor;
     if (arrowKeys.includes(key)) this.moveChip(key);
+  }
 
+  handleIfWon () {
     if (this.won) {
-      console.log('you win!');
+      alert('you win!');
       this.won = false;
+      this.keysToListenFor = [];
     }
   }
 
