@@ -16930,15 +16930,15 @@
 	    this.chipHasItems = chipHasItems;
 	
 	    this.tileSize = 40;
-	    this.numRows = 9;
-	    this.numCols = 5;
+	    this.width = 195;
+	    this.height = 380;
 	    this.makePane();
 	  }
 	
 	  _createClass(InfoPane, [{
 	    key: 'makePane',
 	    value: function makePane() {
-	      this.infoPane = d3.select('body').append('svg').attr('class', 'info-pane').attr('x', this.tileSize / 2).attr('y', this.tileSize / 2).attr('width', (this.numCols + 0.5) * this.tileSize).attr('height', (this.numRows + 0.5) * this.tileSize);
+	      this.infoPane = d3.select('body').append('svg').attr('class', 'info-pane').attr('x', this.tileSize / 2).attr('y', this.tileSize / 2).attr('width', this.width).attr('height', this.height);
 	
 	      this.addInfoText();
 	      this.addInfoValues();
@@ -16963,18 +16963,23 @@
 	
 	      this.infoPane.append('text').attr('x', 59).attr('y', 226).text('Left').attr('class', 'info-pane-text');
 	    }
-	  }, {
-	    key: 'addItemGrid',
-	    value: function addItemGrid() {
-	      var nameString = tileDetail.regularFloor;
-	      for (var i = 7; i < 9; i++) {
-	        for (var j = 1; j < 5; j++) {
-	          this.infoPane.append('rect').attr('width', this.tileSize).attr('height', this.tileSize).attr('x', j * this.tileSize).attr('y', i * this.tileSize).style('fill', 'url(#' + nameString + ')');
 	
-	          // r b y g
-	        }
-	      }
-	    }
+	    // addItemGrid () {
+	    //   let nameString = tileDetail.regularFloor;
+	    //   for (let i = 7; i < 9; i++) {
+	    //     for (let j = 1; j < 5; j++) {
+	    //       this.infoPane.append('rect')
+	    //       .attr('width', this.tileSize)
+	    //       .attr('height', this.tileSize)
+	    //       .attr('x', j * this.tileSize)
+	    //       .attr('y', i * this.tileSize)
+	    //       .style('fill', `url(#${nameString})`);
+	    //
+	    //       // r b y g
+	    //     }
+	    //   }
+	    // }
+	
 	  }]);
 	
 	  return InfoPane;

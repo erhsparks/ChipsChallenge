@@ -2,7 +2,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   background-image: url('../images/background.png');
   background-color: #176f18;
 }
@@ -12,16 +12,18 @@ body {
   justify-content: center;
   background-image: url('../images/board_bkg.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
-/*.game-map {
-}*/
+.game-map {
+  padding: 10px;
+}
 
 .info-pane {
   background-image: url('../images/info_bkg.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
+  margin-left: 50px;
 }
 
 .info-pane-text {
