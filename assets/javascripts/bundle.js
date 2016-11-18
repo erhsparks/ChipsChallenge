@@ -80,6 +80,8 @@
 	
 	var _info_pane2 = _interopRequireDefault(_info_pane);
 	
+	var _info_boxes = __webpack_require__(7);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
@@ -180,31 +182,38 @@
 	          y -= dXY;
 	          if (this.chipCanMove(x, y)) {
 	            chip.attr('y', '' + y).style('fill', 'url(#chip_up)');
+	            this.checkIfLeavingHint(x, y + dXY);
 	          }
 	          break;
 	        case 'ArrowDown':
 	          y += dXY;
 	          if (this.chipCanMove(x, y)) {
 	            chip.attr('y', '' + y).style('fill', 'url(#chip_down)');
+	            this.checkIfLeavingHint(x, y - dXY);
 	          }
 	          break;
 	        case 'ArrowLeft':
 	          x -= dXY;
 	          if (this.chipCanMove(x, y)) {
 	            chip.attr('x', '' + x).style('fill', 'url(#chip_left)');
+	            this.checkIfLeavingHint(x + dXY, y);
 	          }
 	          break;
 	        case 'ArrowRight':
 	          x += dXY;
 	          if (this.chipCanMove(x, y)) {
 	            chip.attr('x', '' + x).style('fill', 'url(#chip_right)');
+	            this.checkIfLeavingHint(x - dXY, y);
 	          }
 	          break;
 	      }
 	
 	      if (this.didWeWin(x, y)) {
 	        this.won = true;
-	      } else this.checkForItems(x, y);
+	      } else {
+	        this.checkForHintTile(x, y);
+	        this.checkForItems(x, y);
+	      }
 	    }
 	  }, {
 	    key: 'chipCanMove',
@@ -287,16 +296,38 @@
 	          var itemY = parseInt(item.attr('y'));
 	          if (x === itemX && y === itemY) {
 	            if (itemName === '.computerChips') {
+	              item.remove();
 	              chipsLeft -= 1;
 	            } else {
+	              item.remove();
 	              chipsItems[itemName] += 1;
 	            }
-	            item.remove();
 	          }
 	        });
 	      });
 	
 	      this.chipsLeft = chipsLeft;
+	    }
+	  }, {
+	    key: 'checkForHintTile',
+	    value: function checkForHintTile(x, y) {
+	      var hint = this.gameMap.gameObjects.hint[0];
+	      this.hintX = parseInt(hint.attr('x'));
+	      this.hintY = parseInt(hint.attr('y'));
+	
+	      if (x === this.hintX && y === this.hintY) {
+	        clearInterval(this.gameTimer);
+	        (0, _info_boxes.helpBox)();
+	      }
+	    }
+	  }, {
+	    key: 'checkIfLeavingHint',
+	    value: function checkIfLeavingHint(x, y) {
+	      if (x === this.hintX && y === this.hintY) {
+	        d3.select('.message-box').remove();
+	        d3.selectAll('.info-text').remove();
+	        this.startTimer();
+	      }
 	    }
 	  }]);
 	
@@ -16986,6 +17017,52 @@
 	}();
 	
 	exports.default = InfoPane;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.loseBox = exports.winBox = exports.helpBox = undefined;
+	
+	var _d = __webpack_require__(2);
+	
+	var d3 = _interopRequireWildcard(_d);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var makeBox = function makeBox(message) {
+	  var info = d3.select('.info-pane');
+	
+	  info.append('rect').attr('x', 10).attr('y', 10).attr('width', 175).attr('height', 360).attr('fill', 'black').attr('display', 'flex').attr('justify-content', 'center').attr('class', 'message-box');
+	
+	  for (var yOffset = 0; yOffset < message.length * 22; yOffset += 22) {
+	    var i = yOffset / 22;
+	    makeText(info, message[i], yOffset);
+	  }
+	};
+	
+	var makeText = function makeText(info, messagePart, yOffset) {
+	  info.append('text').attr('x', 12.5).attr('y', 40 + yOffset).attr('width', 170).attr('height', 355).text(messagePart).attr('fill', 'cyan').attr('class', 'info-text');
+	};
+	
+	var helpBox = exports.helpBox = function helpBox() {
+	  var message = ['Use the arrow', 'keys to move', 'Chip.', ' ', 'Your goal is', 'to reach the', 'blue portal.', ' ', 'Collect the', 'computer', 'chips to pass', 'the gate.'];
+	
+	  makeBox(message);
+	};
+	
+	var winBox = exports.winBox = function winBox() {
+	  makeBox('Yowzer! Great work, Chip!');
+	};
+	
+	var loseBox = exports.loseBox = function loseBox() {
+	  makeBox('Oh no! You ran out of time.');
+	};
 
 /***/ }
 /******/ ]);

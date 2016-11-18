@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import LevelOneMap from './map';
 import InfoPane from './info_pane';
+import { helpBox, winBox, loseBox } from './info_boxes';
 
 class ChipsChallenge {
   constructor () {
@@ -90,6 +91,7 @@ class ChipsChallenge {
         if (this.chipCanMove(x, y)) {
           chip.attr('y', `${y}`)
           .style('fill', `url(#chip_up)`);
+          this.checkIfLeavingHint(x, y + dXY);
         }
         break;
       case 'ArrowDown':
@@ -97,6 +99,7 @@ class ChipsChallenge {
         if (this.chipCanMove(x, y)) {
           chip.attr('y', `${y}`)
           .style('fill', `url(#chip_down)`);
+          this.checkIfLeavingHint(x, y - dXY);
         }
         break;
       case 'ArrowLeft':
@@ -104,6 +107,7 @@ class ChipsChallenge {
         if (this.chipCanMove(x, y)) {
           chip.attr('x', `${x}`)
           .style('fill', `url(#chip_left)`);
+          this.checkIfLeavingHint(x + dXY, y);
         }
         break;
       case 'ArrowRight':
@@ -111,13 +115,17 @@ class ChipsChallenge {
         if (this.chipCanMove(x, y)) {
           chip.attr('x', `${x}`)
           .style('fill', `url(#chip_right)`);
+          this.checkIfLeavingHint(x - dXY, y);
         }
         break;
     }
 
     if (this.didWeWin(x, y)) {
       this.won = true;
-    } else this.checkForItems(x, y);
+    } else {
+      this.checkForHintTile(x, y);
+      this.checkForItems(x, y);
+    }
   }
 
   chipCanMove (x, y) {
@@ -202,16 +210,36 @@ class ChipsChallenge {
         let itemY = parseInt(item.attr('y'));
         if (x === itemX && y === itemY) {
           if (itemName === '.computerChips') {
+            item.remove();
             chipsLeft -= 1;
           } else {
+            item.remove();
             chipsItems[itemName] += 1;
           }
-          item.remove();
         }
       });
     });
 
     this.chipsLeft = chipsLeft;
+  }
+
+  checkForHintTile (x, y) {
+    let hint = this.gameMap.gameObjects.hint[0];
+    this.hintX = parseInt(hint.attr('x'));
+    this.hintY = parseInt(hint.attr('y'));
+
+    if (x === this.hintX && y === this.hintY) {
+      clearInterval(this.gameTimer);
+      helpBox();
+    }
+  }
+
+  checkIfLeavingHint (x, y) {
+    if (x === this.hintX && y === this.hintY) {
+      d3.select('.message-box').remove();
+      d3.selectAll('.info-text').remove();
+      this.startTimer();
+    }
   }
 }
 

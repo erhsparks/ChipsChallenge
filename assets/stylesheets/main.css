@@ -26,6 +26,12 @@ body {
   margin-left: 50px;
 }
 
+.info-text {
+  font-family: sans-serif;
+  font-size: 20px;
+  text-transform: uppercase;;
+}
+
 .info-pane-text {
   text-transform: uppercase;
   font-family: sans-serif;
