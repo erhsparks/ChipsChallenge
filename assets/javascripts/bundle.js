@@ -80,7 +80,7 @@
 	
 	var _info_pane2 = _interopRequireDefault(_info_pane);
 	
-	var _info_boxes = __webpack_require__(7);
+	var _info_boxes = __webpack_require__(9);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -118,12 +118,10 @@
 	
 	      this.gameTimer = window.setInterval(function () {
 	        if (_this.timeLeft > 0) {
-	          console.log(_this.timeLeft);
 	          _this.timeLeft -= 1;
 	          _this.infoPane.timeLeft = _this.timeLeft;
 	          _this.infoPane.updateTimeLeft();
 	        } else {
-	          console.log(_this.timeLeft);
 	          _this.outOfTime = true;
 	          (0, _info_boxes.outOfTimeBox)();
 	          _this.keysToListenFor = [];
@@ -244,6 +242,8 @@
 	  }, {
 	    key: 'isBarrierAt',
 	    value: function isBarrierAt(x, y) {
+	      var _this3 = this;
+	
 	      var isBarrier = false;
 	
 	      var chipsLeft = this.chipsLeft;
@@ -252,6 +252,8 @@
 	      var barrierNames = ['.chipSocket', '.blueDoors', '.redDoors', '.yellowDoors', '.greenDoors'];
 	
 	      barrierNames.forEach(function (barrierName) {
+	        var infoPane = _this3.infoPane;
+	
 	        d3.selectAll(barrierName).each(function () {
 	          var barrier = d3.select(this);
 	          var barrierX = parseInt(barrier.attr('x'));
@@ -263,7 +265,10 @@
 	            } else {
 	              var color = barrierName.match(/\.(.*)Doors/)[1];
 	              if (chipsItems['.' + color + 'Keys'] > 0) {
-	                if (color !== 'green') chipsItems['.' + color + 'Keys'] -= 1;
+	                if (color !== 'green') {
+	                  chipsItems['.' + color + 'Keys'] -= 1;
+	                  infoPane.updateItems();
+	                }
 	                barrier.remove();
 	              } else isBarrier = true;
 	            }
@@ -291,8 +296,6 @@
 	      var chipsItems = this.chipHasItems;
 	      var chipsLeft = this.chipsLeft;
 	      var infoPane = this.infoPane;
-	      var infoPaneNode = this.infoPaneNode;
-	      var infoPaneChipsLeft = infoPaneNode.select('.chips-left');
 	
 	      var itemNames = ['.computerChips', '.redKeys', '.blueKeys', '.greenKeys', '.yellowKeys'];
 	      itemNames.forEach(function (itemName) {
@@ -308,8 +311,8 @@
 	              infoPane.updateChipsLeft();
 	            } else {
 	              item.remove();
-	              infoPane.addItem(itemName);
 	              chipsItems[itemName] += 1;
+	              infoPane.updateItems();
 	            }
 	          }
 	        });
@@ -17032,17 +17035,37 @@
 	        timeLeftNode.attr('x', this.twoDigit);
 	      } else if (this.timeLeft < 10) {
 	        timeLeftNode.attr('x', this.oneDigit);
+	        if (this.timeLeft === 0) {
+	          var currentClass = timeLeftNode.attr('class');
+	          var newClass = currentClass + ' none-left';
+	          timeLeftNode.attr('class', newClass);
+	        }
 	      }
 	    }
 	  }, {
-	    key: 'addItem',
-	    value: function addItem(itemName) {}
-	  }, {
-	    key: 'removeItem',
-	    value: function removeItem(itemName) {}
-	  }, {
 	    key: 'updateItems',
-	    value: function updateItems() {}
+	    value: function updateItems() {
+	      // currently not working but will eventually display
+	      // the items that Chip has picked up.
+	
+	      // console.log(this.chipHasItems);
+	      // let chipsItems = this.chipHasItems;
+	      //
+	      //
+	      // Object.keys(chipsItems).forEach((itemName, i) => {
+	      //   if (chipsItems[itemName] > 0) {
+	      //     itemName = itemName.slice(1);
+	      //
+	      //     this.infoPane.append('rect')
+	      //     .attr('x', 17 + (i * this.tileSize))
+	      //     .attr('y', 280)
+	      //     .attr('width', this.tileSize)
+	      //     .attr('height', this.tileSize)
+	      //     .style('fill', `url(#blue_key)`)
+	      //     .attr('class', `has-${itemName}`);
+	      //   }
+	      // });
+	    }
 	  }]);
 	
 	  return InfoPane;
@@ -17051,7 +17074,9 @@
 	exports.default = InfoPane;
 
 /***/ },
-/* 7 */
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

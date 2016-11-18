@@ -31,12 +31,10 @@ class ChipsChallenge {
   startTimer() {
     this.gameTimer = window.setInterval(() => {
       if (this.timeLeft > 0) {
-        console.log(this.timeLeft);
         this.timeLeft -= 1;
         this.infoPane.timeLeft = this.timeLeft;
         this.infoPane.updateTimeLeft();
       } else {
-        console.log(this.timeLeft);
         this.outOfTime = true;
         outOfTimeBox();
         this.keysToListenFor = [];
@@ -165,6 +163,8 @@ class ChipsChallenge {
     ];
 
     barrierNames.forEach(barrierName => {
+      let infoPane = this.infoPane;
+
       d3.selectAll(barrierName).each(function () {
         let barrier = d3.select(this);
         let barrierX = parseInt(barrier.attr('x'));
@@ -176,7 +176,10 @@ class ChipsChallenge {
           } else {
             let color = barrierName.match(/\.(.*)Doors/)[1];
             if (chipsItems[`.${color}Keys`] > 0) {
-              if (color !== 'green') chipsItems[`.${color}Keys`] -= 1;
+              if (color !== 'green') {
+                chipsItems[`.${color}Keys`] -= 1;
+                infoPane.updateItems();
+              }
               barrier.remove();
             } else isBarrier = true;
           }
@@ -202,8 +205,6 @@ class ChipsChallenge {
     let chipsItems = this.chipHasItems;
     let chipsLeft = this.chipsLeft;
     let infoPane = this.infoPane;
-    let infoPaneNode = this.infoPaneNode;
-    let infoPaneChipsLeft = infoPaneNode.select('.chips-left');
 
     let itemNames = [
       '.computerChips', '.redKeys', '.blueKeys',
@@ -222,8 +223,8 @@ class ChipsChallenge {
             infoPane.updateChipsLeft();
           } else {
             item.remove();
-            infoPane.addItem(itemName);
             chipsItems[itemName] += 1;
+            infoPane.updateItems();
           }
         }
       });

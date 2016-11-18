@@ -98,19 +98,35 @@ class InfoPane {
       timeLeftNode.attr('x', this.twoDigit);
     } else if (this.timeLeft < 10) {
       timeLeftNode.attr('x', this.oneDigit);
+      if (this.timeLeft === 0) {
+        let currentClass = timeLeftNode.attr('class');
+        let newClass = `${currentClass} none-left`;
+        timeLeftNode.attr('class', newClass);
+      }
     }
   }
 
-  addItem (itemName) {
-
-  }
-
-  removeItem (itemName) {
-
-  }
-
   updateItems () {
-
+    // currently not working but will eventually display
+    // the items that Chip has picked up.
+    
+    // console.log(this.chipHasItems);
+    // let chipsItems = this.chipHasItems;
+    //
+    //
+    // Object.keys(chipsItems).forEach((itemName, i) => {
+    //   if (chipsItems[itemName] > 0) {
+    //     itemName = itemName.slice(1);
+    //
+    //     this.infoPane.append('rect')
+    //     .attr('x', 17 + (i * this.tileSize))
+    //     .attr('y', 280)
+    //     .attr('width', this.tileSize)
+    //     .attr('height', this.tileSize)
+    //     .style('fill', `url(#blue_key)`)
+    //     .attr('class', `has-${itemName}`);
+    //   }
+    // });
   }
 }
 
