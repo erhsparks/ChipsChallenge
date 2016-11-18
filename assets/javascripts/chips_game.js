@@ -15,11 +15,12 @@ class ChipsChallenge {
       '.greenKeys': 0
     };
 
-    this.gameInfo = new InfoPane(
+    this.infoPane = new InfoPane(
       this.timeLeft,
       this.chipsLeft,
       this.chipHasItems
     );
+    this.infoPaneNode = d3.select('.info-pane');
 
     this.won = false;
     this.outOfTime = false;
@@ -198,6 +199,9 @@ class ChipsChallenge {
   checkForItems (x, y) {
     let chipsItems = this.chipHasItems;
     let chipsLeft = this.chipsLeft;
+    let infoPane = this.infoPane;
+    let infoPaneNode = this.infoPaneNode;
+    let infoPaneChipsLeft = infoPaneNode.select('.chips-left');
 
     let itemNames = [
       '.computerChips', '.redKeys', '.blueKeys',
@@ -212,8 +216,11 @@ class ChipsChallenge {
           if (itemName === '.computerChips') {
             item.remove();
             chipsLeft -= 1;
+            infoPane.chipsLeft = chipsLeft;
+            infoPane.updateChipsLeft();
           } else {
             item.remove();
+            infoPane.addItem(itemName);
             chipsItems[itemName] += 1;
           }
         }

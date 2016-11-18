@@ -102,7 +102,8 @@
 	      '.greenKeys': 0
 	    };
 	
-	    this.gameInfo = new _info_pane2.default(this.timeLeft, this.chipsLeft, this.chipHasItems);
+	    this.infoPane = new _info_pane2.default(this.timeLeft, this.chipsLeft, this.chipHasItems);
+	    this.infoPaneNode = d3.select('.info-pane');
 	
 	    this.won = false;
 	    this.outOfTime = false;
@@ -287,6 +288,9 @@
 	    value: function checkForItems(x, y) {
 	      var chipsItems = this.chipHasItems;
 	      var chipsLeft = this.chipsLeft;
+	      var infoPane = this.infoPane;
+	      var infoPaneNode = this.infoPaneNode;
+	      var infoPaneChipsLeft = infoPaneNode.select('.chips-left');
 	
 	      var itemNames = ['.computerChips', '.redKeys', '.blueKeys', '.greenKeys', '.yellowKeys'];
 	      itemNames.forEach(function (itemName) {
@@ -298,8 +302,11 @@
 	            if (itemName === '.computerChips') {
 	              item.remove();
 	              chipsLeft -= 1;
+	              infoPane.chipsLeft = chipsLeft;
+	              infoPane.updateChipsLeft();
 	            } else {
 	              item.remove();
+	              infoPane.addItem(itemName);
 	              chipsItems[itemName] += 1;
 	            }
 	          }
@@ -16977,11 +16984,14 @@
 	  }, {
 	    key: 'addInfoValues',
 	    value: function addInfoValues() {
-	      this.infoPane.append('text').attr('x', 105).attr('y', 72).text('1').attr('class', 'info-pane-values');
+	      this.oneDigit = 105;
+	      this.twoDigit = 85;
 	
-	      this.infoPane.append('text').attr('x', 85).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values');
+	      this.infoPane.append('text').attr('x', this.oneDigit).attr('y', 72).text('1').attr('class', 'info-pane-values');
 	
-	      this.infoPane.append('text').attr('x', 85).attr('y', 265).text('' + this.chipsLeft).attr('class', 'info-pane-values');
+	      this.infoPane.append('text').attr('x', this.twoDigit).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values time-left');
+	
+	      this.infoPane.append('text').attr('x', this.twoDigit).attr('y', 265).text('' + this.chipsLeft).attr('class', 'info-pane-values chips-left');
 	    }
 	  }, {
 	    key: 'addInfoText',
@@ -16994,23 +17004,22 @@
 	
 	      this.infoPane.append('text').attr('x', 59).attr('y', 226).text('Left').attr('class', 'info-pane-text');
 	    }
+	  }, {
+	    key: 'updateChipsLeft',
+	    value: function updateChipsLeft() {
+	      var chipsLeftNode = this.infoPane.select('.chips-left');
+	      chipsLeftNode.text(this.chipsLeft);
 	
-	    // addItemGrid () {
-	    //   let nameString = tileDetail.regularFloor;
-	    //   for (let i = 7; i < 9; i++) {
-	    //     for (let j = 1; j < 5; j++) {
-	    //       this.infoPane.append('rect')
-	    //       .attr('width', this.tileSize)
-	    //       .attr('height', this.tileSize)
-	    //       .attr('x', j * this.tileSize)
-	    //       .attr('y', i * this.tileSize)
-	    //       .style('fill', `url(#${nameString})`);
-	    //
-	    //       // r b y g
-	    //     }
-	    //   }
-	    // }
-	
+	      if (this.chipsLeft < 10) {
+	        chipsLeftNode.attr('x', this.oneDigit);
+	      }
+	    }
+	  }, {
+	    key: 'addItem',
+	    value: function addItem(itemName) {}
+	  }, {
+	    key: 'removeItem',
+	    value: function removeItem(itemName) {}
 	  }]);
 	
 	  return InfoPane;

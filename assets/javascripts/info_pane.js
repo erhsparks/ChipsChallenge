@@ -27,23 +27,26 @@ class InfoPane {
   }
 
   addInfoValues () {
+    this.oneDigit = 105;
+    this.twoDigit = 85;
+
     this.infoPane.append('text')
-    .attr('x', 105)
+    .attr('x', this.oneDigit)
     .attr('y', 72)
     .text(`1`)
     .attr('class', 'info-pane-values');
 
     this.infoPane.append('text')
-    .attr('x', 85)
+    .attr('x', this.twoDigit)
     .attr('y', 150)
     .text(`${this.timeLeft}`)
-    .attr('class', 'info-pane-values');
+    .attr('class', 'info-pane-values time-left');
 
     this.infoPane.append('text')
-    .attr('x', 85)
+    .attr('x', this.twoDigit)
     .attr('y', 265)
     .text(`${this.chipsLeft}`)
-    .attr('class', 'info-pane-values');
+    .attr('class', 'info-pane-values chips-left');
   }
 
   addInfoText () {
@@ -72,21 +75,22 @@ class InfoPane {
     .attr('class', 'info-pane-text');
   }
 
-  // addItemGrid () {
-  //   let nameString = tileDetail.regularFloor;
-  //   for (let i = 7; i < 9; i++) {
-  //     for (let j = 1; j < 5; j++) {
-  //       this.infoPane.append('rect')
-  //       .attr('width', this.tileSize)
-  //       .attr('height', this.tileSize)
-  //       .attr('x', j * this.tileSize)
-  //       .attr('y', i * this.tileSize)
-  //       .style('fill', `url(#${nameString})`);
-  //
-  //       // r b y g
-  //     }
-  //   }
-  // }
+  updateChipsLeft () {
+    let chipsLeftNode = this.infoPane.select('.chips-left');
+    chipsLeftNode.text(this.chipsLeft);
+
+    if (this.chipsLeft < 10) {
+      chipsLeftNode.attr('x', this.oneDigit)
+    }
+  }
+
+  addItem (itemName) {
+
+  }
+
+  removeItem (itemName) {
+
+  }
 }
 
 export default InfoPane;
