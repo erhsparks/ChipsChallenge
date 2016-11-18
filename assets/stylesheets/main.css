@@ -15,11 +15,11 @@ body {
   fill: blue;
 }
 
-.chipCollector {
+.chipSocket {
   fill: gold;
 }
 
-.help {
+.hint {
   fill: yellow;
 }
 

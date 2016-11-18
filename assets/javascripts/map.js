@@ -122,13 +122,13 @@ class LevelOneMap {
   itemStartingPositions () {
     return (
       {
+        hint: [
+          [10, 8]
+        ],
         chipOurHero: [
           [10, 9]
         ],
-        help: [
-          [10, 8]
-        ],
-        chipCollector: [
+        chipSocket: [
           [10, 6]
         ],
         greenDoors: [

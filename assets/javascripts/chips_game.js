@@ -134,7 +134,7 @@ class ChipsChallenge {
     let chipsItems = this.chipHasItems;
 
     let barrierNames = [
-      '.chipCollector',
+      '.chipSocket',
       '.blueDoors', '.redDoors',
       '.yellowDoors', '.greenDoors'
     ];
@@ -146,7 +146,7 @@ class ChipsChallenge {
         let barrierY = parseInt(barrier.attr('y'));
 
         if (x === barrierX && y === barrierY) {
-          if (barrierName === '.chipCollector') {
+          if (barrierName === '.chipSocket') {
             (chipsLeft === 0) ? barrier.remove() : isBarrier = true;
           } else {
             let color = barrierName.match(/\.(.*)Doors/)[1];
@@ -183,9 +183,9 @@ class ChipsChallenge {
     ];
     itemNames.forEach(itemName => {
       d3.selectAll(itemName).each(function () {
-        let item = this;
-        let itemX = item.x.baseVal.value;
-        let itemY = item.y.baseVal.value;
+        let item = d3.select(this);
+        let itemX = parseInt(item.attr('x'));
+        let itemY = parseInt(item.attr('y'));
         if (x === itemX && y === itemY) {
           if (itemName === '.computerChips') {
             chipsLeft -= 1;
