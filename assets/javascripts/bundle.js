@@ -120,6 +120,8 @@
 	        if (_this.timeLeft > 0) {
 	          console.log(_this.timeLeft);
 	          _this.timeLeft -= 1;
+	          _this.infoPane.timeLeft = _this.timeLeft;
+	          _this.infoPane.updateTimeLeft();
 	        } else {
 	          console.log(_this.timeLeft);
 	          _this.outOfTime = true;
@@ -16775,7 +16777,7 @@
 	    this.makeMap(root);
 	
 	    this.chipsLeft = this.itemStartingPositions().computerChips.length;
-	    this.timeLeft = 99;
+	    this.timeLeft = 100;
 	  }
 	
 	  _createClass(LevelOneMap, [{
@@ -16986,10 +16988,11 @@
 	    value: function addInfoValues() {
 	      this.oneDigit = 105;
 	      this.twoDigit = 85;
+	      this.threeDigit = 65;
 	
 	      this.infoPane.append('text').attr('x', this.oneDigit).attr('y', 72).text('1').attr('class', 'info-pane-values');
 	
-	      this.infoPane.append('text').attr('x', this.twoDigit).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values time-left');
+	      this.infoPane.append('text').attr('x', this.threeDigit).attr('y', 150).text('' + this.timeLeft).attr('class', 'info-pane-values time-left');
 	
 	      this.infoPane.append('text').attr('x', this.twoDigit).attr('y', 265).text('' + this.chipsLeft).attr('class', 'info-pane-values chips-left');
 	    }
@@ -17012,6 +17015,23 @@
 	
 	      if (this.chipsLeft < 10) {
 	        chipsLeftNode.attr('x', this.oneDigit);
+	        if (this.chipsLeft === 0) {
+	          var currentClass = chipsLeftNode.attr('class');
+	          var newClass = currentClass + ' none-left';
+	          chipsLeftNode.attr('class', newClass);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'updateTimeLeft',
+	    value: function updateTimeLeft() {
+	      var timeLeftNode = this.infoPane.select('.time-left');
+	      timeLeftNode.text(this.timeLeft);
+	
+	      if (this.timeLeft < 100 && this.timeLeft >= 10) {
+	        timeLeftNode.attr('x', this.twoDigit);
+	      } else if (this.timeLeft < 10) {
+	        timeLeftNode.attr('x', this.oneDigit);
 	      }
 	    }
 	  }, {
@@ -17020,6 +17040,9 @@
 	  }, {
 	    key: 'removeItem',
 	    value: function removeItem(itemName) {}
+	  }, {
+	    key: 'updateItems',
+	    value: function updateItems() {}
 	  }]);
 	
 	  return InfoPane;

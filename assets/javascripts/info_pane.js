@@ -29,6 +29,7 @@ class InfoPane {
   addInfoValues () {
     this.oneDigit = 105;
     this.twoDigit = 85;
+    this.threeDigit = 65;
 
     this.infoPane.append('text')
     .attr('x', this.oneDigit)
@@ -37,7 +38,7 @@ class InfoPane {
     .attr('class', 'info-pane-values');
 
     this.infoPane.append('text')
-    .attr('x', this.twoDigit)
+    .attr('x', this.threeDigit)
     .attr('y', 150)
     .text(`${this.timeLeft}`)
     .attr('class', 'info-pane-values time-left');
@@ -80,7 +81,23 @@ class InfoPane {
     chipsLeftNode.text(this.chipsLeft);
 
     if (this.chipsLeft < 10) {
-      chipsLeftNode.attr('x', this.oneDigit)
+      chipsLeftNode.attr('x', this.oneDigit);
+      if (this.chipsLeft === 0) {
+        let currentClass = chipsLeftNode.attr('class');
+        let newClass = `${currentClass} none-left`;
+        chipsLeftNode.attr('class', newClass);
+      }
+    }
+  }
+
+  updateTimeLeft () {
+    let timeLeftNode = this.infoPane.select('.time-left');
+    timeLeftNode.text(this.timeLeft);
+
+    if (this.timeLeft < 100 && this.timeLeft >= 10) {
+      timeLeftNode.attr('x', this.twoDigit);
+    } else if (this.timeLeft < 10) {
+      timeLeftNode.attr('x', this.oneDigit);
     }
   }
 
@@ -89,6 +106,10 @@ class InfoPane {
   }
 
   removeItem (itemName) {
+
+  }
+
+  updateItems () {
 
   }
 }

@@ -33,6 +33,8 @@ class ChipsChallenge {
       if (this.timeLeft > 0) {
         console.log(this.timeLeft);
         this.timeLeft -= 1;
+        this.infoPane.timeLeft = this.timeLeft;
+        this.infoPane.updateTimeLeft();
       } else {
         console.log(this.timeLeft);
         this.outOfTime = true;
