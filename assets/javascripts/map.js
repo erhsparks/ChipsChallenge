@@ -30,11 +30,17 @@ class LevelOneMap {
     this.addGrid();
     this.addTiles();
     this.addItems();
-
+    this.addOtherChipFaces();
     // this.chipNode = this.gameMap.select('.chipOurHero');
     // let chipX = this.chipNode.attr('x');
     // let chipY = this.chipNode.attr('y');
     // this.gameMap.attr('x', chipX).attr('y', chipY);
+  }
+
+  addOtherChipFaces() {
+    this.makeImageDef('chip_up');
+    this.makeImageDef('chip_left');
+    this.makeImageDef('chip_right');
   }
 
   makeImageDef (nameString) {

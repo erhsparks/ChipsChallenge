@@ -67,6 +67,8 @@ class ChipsChallenge {
 
   handleWin () {
     if (this.won) {
+      let chip = this.gameMap.gameObjects.chipOurHero[0];
+      chip.style('fill', `url(#chip_down)`);
       let winTime = this.gameMap.timeLeft - this.timeLeft;
       alert(`Onwards! You won in ${winTime} seconds!`);
 
@@ -85,19 +87,31 @@ class ChipsChallenge {
     switch (direction) {
       case 'ArrowUp':
         y -= dXY;
-        if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
+        if (this.chipCanMove(x, y)) {
+          chip.attr('y', `${y}`)
+          .style('fill', `url(#chip_up)`);
+        }
         break;
       case 'ArrowDown':
         y += dXY;
-        if (this.chipCanMove(x, y)) chip.attr('y', `${y}`);
+        if (this.chipCanMove(x, y)) {
+          chip.attr('y', `${y}`)
+          .style('fill', `url(#chip_down)`);
+        }
         break;
       case 'ArrowLeft':
         x -= dXY;
-        if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
+        if (this.chipCanMove(x, y)) {
+          chip.attr('x', `${x}`)
+          .style('fill', `url(#chip_left)`);
+        }
         break;
       case 'ArrowRight':
         x += dXY;
-        if (this.chipCanMove(x, y)) chip.attr('x', `${x}`);
+        if (this.chipCanMove(x, y)) {
+          chip.attr('x', `${x}`)
+          .style('fill', `url(#chip_right)`);
+        }
         break;
     }
 
