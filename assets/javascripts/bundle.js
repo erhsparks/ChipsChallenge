@@ -80,7 +80,7 @@
 	
 	var _info_pane2 = _interopRequireDefault(_info_pane);
 	
-	var _info_boxes = __webpack_require__(9);
+	var _info_boxes = __webpack_require__(7);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -17081,9 +17081,7 @@
 	exports.default = InfoPane;
 
 /***/ },
-/* 7 */,
-/* 8 */,
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
