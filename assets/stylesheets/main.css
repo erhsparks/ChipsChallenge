@@ -15,8 +15,8 @@ body {
   background-size: contain;
 }
 
-.game-map {
-}
+/*.game-map {
+}*/
 
 .info-pane {
   background-image: url('../images/info_bkg.png');
@@ -30,6 +30,14 @@ body {
   fill: #d01051;
   font-weight: bold;
   font-size: 25px;
+}
+
+.info-pane-values {
+  text-transform: uppercase;
+  font-family: monospace;
+  fill: #2bdb2d;
+  font-weight: bold;
+  font-size: 30px;
 }
 
 .regularFloor,

@@ -22,16 +22,28 @@ class InfoPane {
     .attr('width', (this.numCols + 0.5) * this.tileSize)
     .attr('height', (this.numRows + 0.5) * this.tileSize);
 
-    // this.infoPane.append('rect')
-    // .attr('class', 'info-pane')
-    // .attr('x', this.tileSize / 2)
-    // .attr('y', this.tileSize / 2)
-    // .attr('width', (this.numCols + 0.5) * this.tileSize)
-    // .attr('height', (this.numRows + 0.5) * this.tileSize)
-    // .style('fill', 'lightgray');
-
-    // this.addItemGrid();
     this.addInfoText();
+    this.addInfoValues();
+  }
+
+  addInfoValues () {
+    this.infoPane.append('text')
+    .attr('x', 105)
+    .attr('y', 72)
+    .text(`1`)
+    .attr('class', 'info-pane-values');
+
+    this.infoPane.append('text')
+    .attr('x', 85)
+    .attr('y', 150)
+    .text(`${this.timeLeft}`)
+    .attr('class', 'info-pane-values');
+
+    this.infoPane.append('text')
+    .attr('x', 85)
+    .attr('y', 265)
+    .text(`${this.chipsLeft}`)
+    .attr('class', 'info-pane-values');
   }
 
   addInfoText () {
