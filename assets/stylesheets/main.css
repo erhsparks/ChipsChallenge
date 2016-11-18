@@ -1,9 +1,39 @@
 body {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background-image: url('../images/background.png');
+  background-color: #176f18;
 }
 
-.regularFloor {
+.game-map-container {
+  display: flex;
+  justify-content: center;
+  background-image: url('../images/board_bkg.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.game-map {
+}
+
+.info-pane {
+  background-image: url('../images/info_bkg.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.info-pane-text {
+  text-transform: uppercase;
+  font-family: sans-serif;
+  fill: #d01051;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.regularFloor,
+.info-pane {
   fill: lightgray;
 }
 

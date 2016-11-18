@@ -22,14 +22,42 @@ class InfoPane {
     .attr('width', (this.numCols + 0.5) * this.tileSize)
     .attr('height', (this.numRows + 0.5) * this.tileSize);
 
-    this.infoPane.append('rect')
-    .attr('x', this.tileSize / 2)
-    .attr('y', this.tileSize / 2)
-    .attr('width', (this.numCols + 0.5) * this.tileSize)
-    .attr('height', (this.numRows + 0.5) * this.tileSize)
-    .style('fill', 'lightgray');
+    // this.infoPane.append('rect')
+    // .attr('class', 'info-pane')
+    // .attr('x', this.tileSize / 2)
+    // .attr('y', this.tileSize / 2)
+    // .attr('width', (this.numCols + 0.5) * this.tileSize)
+    // .attr('height', (this.numRows + 0.5) * this.tileSize)
+    // .style('fill', 'lightgray');
 
-    this.addItemGrid();
+    // this.addItemGrid();
+    this.addInfoText();
+  }
+
+  addInfoText () {
+    this.infoPane.append('text')
+    .attr('x', 51)
+    .attr('y', 35)
+    .text('Level')
+    .attr('class', 'info-pane-text');
+
+    this.infoPane.append('text')
+    .attr('x', 60)
+    .attr('y', 112)
+    .text('Time')
+    .attr('class', 'info-pane-text');
+
+    this.infoPane.append('text')
+    .attr('x', 53)
+    .attr('y', 198)
+    .text('Chips')
+    .attr('class', 'info-pane-text');
+
+    this.infoPane.append('text')
+    .attr('x', 59)
+    .attr('y', 226)
+    .text('Left')
+    .attr('class', 'info-pane-text');
   }
 
   addItemGrid () {

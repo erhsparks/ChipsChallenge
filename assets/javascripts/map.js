@@ -7,9 +7,9 @@ class LevelOneMap {
     this.gameObjects = {};
 
     this.numRows = 14 + 6;
-    this.visibleRows = 9;
+    // this.visibleRows = 9;
     this.numCols = 15 + 6;
-    this.visibleCols = 9;
+    // this.visibleCols = 9;
     this.tileSize = 40;
 
     this.makeMap(root);
@@ -19,8 +19,13 @@ class LevelOneMap {
   }
 
   makeMap (root) {
-    this.gameMap = d3.select('body')
-    .append('svg')
+    this.gameMapContainer = d3.select('body')
+    .append('main')
+    .attr('class', 'game-map-container')
+    .attr('width', this.numCols * this.tileSize + 8)
+    .attr('height', this.numRows * this.tileSize + 8);
+
+    this.gameMap = this.gameMapContainer.append('svg')
     .attr('class', 'game-map')
     .attr('width', this.numCols * this.tileSize)
     .attr('height', this.numRows * this.tileSize);
