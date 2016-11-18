@@ -122,7 +122,7 @@
 	        } else {
 	          console.log(_this.timeLeft);
 	          _this.outOfTime = true;
-	          alert('Oops, out of time!');
+	          (0, _info_boxes.outOfTimeBox)();
 	          _this.keysToListenFor = [];
 	          clearInterval(_this.gameTimer);
 	        }
@@ -162,7 +162,7 @@
 	        var chip = this.gameMap.gameObjects.chipOurHero[0];
 	        chip.style('fill', 'url(#chip_down)');
 	        var winTime = this.gameMap.timeLeft - this.timeLeft;
-	        alert('Onwards! You won in ' + winTime + ' seconds!');
+	        (0, _info_boxes.winBox)();
 	
 	        clearInterval(this.gameTimer);
 	        this.won = false;
@@ -17027,7 +17027,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.loseBox = exports.winBox = exports.helpBox = undefined;
+	exports.outOfTimeBox = exports.winBox = exports.helpBox = undefined;
 	
 	var _d = __webpack_require__(2);
 	
@@ -17057,11 +17057,15 @@
 	};
 	
 	var winBox = exports.winBox = function winBox() {
-	  makeBox('Yowzer! Great work, Chip!');
+	  var message = ['Yowzer!', ' ', 'Great work!'];
+	
+	  makeBox(message);
 	};
 	
-	var loseBox = exports.loseBox = function loseBox() {
-	  makeBox('Oh no! You ran out of time.');
+	var outOfTimeBox = exports.outOfTimeBox = function outOfTimeBox() {
+	  var message = ['Oh no!', ' ', 'You ran out', 'of time!'];
+	
+	  makeBox(message);
 	};
 
 /***/ }

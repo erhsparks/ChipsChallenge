@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import LevelOneMap from './map';
 import InfoPane from './info_pane';
-import { helpBox, winBox, loseBox } from './info_boxes';
+import { helpBox, winBox, outOfTimeBox } from './info_boxes';
 
 class ChipsChallenge {
   constructor () {
@@ -35,7 +35,7 @@ class ChipsChallenge {
       } else {
         console.log(this.timeLeft);
         this.outOfTime = true;
-        alert('Oops, out of time!');
+        outOfTimeBox();
         this.keysToListenFor = [];
         clearInterval(this.gameTimer);
       }
@@ -71,7 +71,7 @@ class ChipsChallenge {
       let chip = this.gameMap.gameObjects.chipOurHero[0];
       chip.style('fill', `url(#chip_down)`);
       let winTime = this.gameMap.timeLeft - this.timeLeft;
-      alert(`Onwards! You won in ${winTime} seconds!`);
+      winBox();
 
       clearInterval(this.gameTimer);
       this.won = false;
