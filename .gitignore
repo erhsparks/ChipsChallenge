@@ -1,6 +1,5 @@
 .DS_Store
 *.xml
 node_modules/
-bundle.js
 bundle.js.map
 docs/ignore/
