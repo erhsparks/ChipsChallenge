@@ -32,18 +32,19 @@ const makeText = (info, messagePart, yOffset) => {
 
 export const helpBox = () => {
   let message = [
+    'Oh no! The',
+    'exit portal',
+    'is blocked',
+    'by a chip',
+    'collector!',
+    ' ',
+    'Pick up all of',
+    'the computer',
+    'chips to open',
+    'it and escape!',
+    ' ',
     'Use the arrow',
     'keys to move',
-    'Chip.',
-    ' ',
-    'Your goal is',
-    'to reach the',
-    'blue portal.',
-    ' ',
-    'Collect the',
-    'computer',
-    'chips to pass',
-    'the gate.'
   ];
 
   makeBox(message);

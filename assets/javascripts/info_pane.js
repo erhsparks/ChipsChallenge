@@ -109,7 +109,7 @@ class InfoPane {
   updateItems () {
     // currently not working but will eventually display
     // the items that Chip has picked up.
-    
+
     // console.log(this.chipHasItems);
     // let chipsItems = this.chipHasItems;
     //

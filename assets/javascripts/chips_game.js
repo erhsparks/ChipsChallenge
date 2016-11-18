@@ -25,6 +25,7 @@ class ChipsChallenge {
     this.won = false;
     this.outOfTime = false;
     this.firstMove = true;
+    helpBox();
     this.listenforArrowKeys();
   }
 
@@ -59,6 +60,7 @@ class ChipsChallenge {
       event.preventDefault();
 
       if (this.firstMove) {
+        this.removeHintBox();
         this.startTimer();
         this.firstMove = false;
       }
@@ -246,10 +248,14 @@ class ChipsChallenge {
 
   checkIfLeavingHint (x, y) {
     if (x === this.hintX && y === this.hintY) {
-      d3.select('.message-box').remove();
-      d3.selectAll('.info-text').remove();
+      this.removeHintBox();
       this.startTimer();
     }
+  }
+
+  removeHintBox () {
+    d3.select('.message-box').remove();
+    d3.selectAll('.info-text').remove();
   }
 }
 

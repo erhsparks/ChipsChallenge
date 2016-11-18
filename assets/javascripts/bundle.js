@@ -108,6 +108,7 @@
 	    this.won = false;
 	    this.outOfTime = false;
 	    this.firstMove = true;
+	    (0, _info_boxes.helpBox)();
 	    this.listenforArrowKeys();
 	  }
 	
@@ -149,6 +150,7 @@
 	        event.preventDefault();
 	
 	        if (this.firstMove) {
+	          this.removeHintBox();
 	          this.startTimer();
 	          this.firstMove = false;
 	        }
@@ -336,10 +338,15 @@
 	    key: 'checkIfLeavingHint',
 	    value: function checkIfLeavingHint(x, y) {
 	      if (x === this.hintX && y === this.hintY) {
-	        d3.select('.message-box').remove();
-	        d3.selectAll('.info-text').remove();
+	        this.removeHintBox();
 	        this.startTimer();
 	      }
+	    }
+	  }, {
+	    key: 'removeHintBox',
+	    value: function removeHintBox() {
+	      d3.select('.message-box').remove();
+	      d3.selectAll('.info-text').remove();
 	    }
 	  }]);
 	
@@ -17108,7 +17115,7 @@
 	};
 	
 	var helpBox = exports.helpBox = function helpBox() {
-	  var message = ['Use the arrow', 'keys to move', 'Chip.', ' ', 'Your goal is', 'to reach the', 'blue portal.', ' ', 'Collect the', 'computer', 'chips to pass', 'the gate.'];
+	  var message = ['Oh no! The', 'exit portal', 'is blocked', 'by a chip', 'collector!', ' ', 'Pick up all of', 'the computer', 'chips to open', 'it and escape!', ' ', 'Use the arrow', 'keys to move'];
 	
 	  makeBox(message);
 	};
