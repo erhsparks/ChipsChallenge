@@ -1,12 +1,12 @@
 ## Chips Challenge
 
-A clone of the first level of the 1991 computer game [Chips Challenge][wikipedia], created by Chuck Sommerville.
+A clone of the first level of the 1992 computer game [Chips Challenge][wikipedia], created by Chuck Sommerville.
 
 ### Background
 
 In this classic PC adventure puzzle game, our hero Chip is a high school computer geek on a journey to win the approval of Melinda the Mental Marvel by successfully navigating her deadly Clubhouse -- collecting computer chips and avoiding peril along the way -- in order to gain entry into her Bit Busters club. Chip must use his every mental resource to dodge deadly monsters and navigate brain-bending puzzles on each level to find all of the computer chips hidden around the map in a race against the countdown clock!
 
-Chips Challenge is a 1-player game which uses the arrow keys to move Chip in the four cardinal directions. Chip's field of view is limited to a 9 x 9 grid in which he remains centered, as the player gives him commands to move, the map shifts around him. As he explores, he must run a gantlet of obstacles, so that he can collect the computer chips required to pass through the portal to the next level.
+The original Chips Challenge is a 1-player game which uses the arrow keys to move Chip in the four cardinal directions. Chip's field of view is limited to a 9 x 9 grid in which he remains centered: as the player gives him commands to move, the map shifts around him. As he explores, he must run a gantlet of obstacles, so that he can collect the computer chips required to pass through the portal to the next level.
 
 Chip's various challenges include locked doors to which he must find keys, surfaces which are impassable or which move him in undesirable ways unless some item is found, bombs, monsters, spies who take Chip's items, the time clock, and the levels themselves, which are often maze-like logic puzzles.
 
@@ -17,36 +17,112 @@ See [this playthrough][playthrough] to get a feel for gameplay.
 
 ### The Game
 
-This app will, at the least, include a playable replica of level 1.
+This single-page app is a clone of the first level of the MS version of Chips Challenge.
 
-Users will:
+Users are greeted by a welcome screen with a view of the game and an info box in the style of the original, explaining the goals and movements:
 
-- Be greeted by a welcome screen with basic instructions, i.e.
-  - Use the arrow keys to move.
-  - Stand on the yellow ? square for hints.
-- Click to start game.
-- Click to pause game.
-- Play game!
-- Click a button to reset the level so that they don't have to refresh the page.
-- If I add the EXTREMELY ANNOYING (I loved it as a kid. My parents did not.) music and sound effects from the original game, there will definitely be a big speaker icon to toggle sound on and off.
+![image of welcome screen](assets/images/for_README/welcome.png)
 
-### Wireframes
+The player moves Chip using the arrow keys, and has him pick up items by walking into the square that item is on. As soon as Chip makes his first move, the welcome message disappears and the level info is revealed.
 
-The app is contained on a single page, just like the original game. As in the original, there will be a square gameplay screen, which displays a 9 x 9 grid with Chip in the center, which represents the currently viewable area of the map. As Chip moves, he stays centered and the map's viewing area shifts.
+![image of the game with timer counting](assets/images/for_README/timer_countdown.png)
 
-![Image of proposed game wireframe](docs/wireframe.png)
+Chip is unable to walk through walls, and may only pass remove locked doors and the chip collector socket if he has a key of the appropriate color or all the chips required for that level, respectively. All keys except the green key, which may be used indefinitely, are removed from Chip's inventory after opening a door of the same color.
 
-Within this limited field of view, Chip must figure out how to get all the chips needed (quantified in the 'CHIPS LEFT' box to the right of the game window) to pass the level before the clock runs out (displayed in seconds under 'TIME').
+![image of Chip going through a key door](assets/images/for_README/keys_doors.png)
 
-Items that Chip picks up along his journey will appear in the 2 x 4 grid to the right of the game window (unless they are STOLEN by a SPY).
+The user may revisit the instructions at any time by moving Chip back onto the hint square. The timer is paused while Chip is standing here.
 
-In addition to these features from the original game, this app will feature two buttons to the left of the game window: a simple refresh icon to restart the level, and a question mark icon to pop up a brief help modal.
+![image of hint](assets/images/for_README/hint.png)
 
-While it will retain the retro feel, simple art, and 9x9 grid, this modern clone will offer a 2016 pixellation-free arcade experience.
+When Chip has collected all required chips, the 'CHIPS REMAINING' panel turns gold, and Chip is able to pass through the chip socket gate to reach the exit portal.
 
-### Architecture & Technologies
+![image of 'chips left' turning gold at zero](assets/images/for_README/no_chips_left.png)
 
-The game logic will be written in JavaScript, with jQuery to handle DOM manipulation. Rendering will be accomplished by adding and removing classes whose appearances will be controlled using CSS.
+When Chip enters the portal in the original game, a popup appears telling him his time, whether is was a personal best, and whether he won on the first try. The submit button reads 'Onwards!' and takes the user to the next level.
+
+This clone only has one level so far, and I thought a pop up would be way too annoying, so when Chip wins or loses, the info text appears again on top of the info panel, with a win or lose message.
+
+![image of Chip victorious](assets/images/for_README/win.png)
+
+This game has no database and does not store session state, so no best time info is displayed. In future, I plan to implement a restart button, which will reset the game but will not reset the page, so I could easily add a best time function to the main game class. This would only persist until the page was refreshed, of course, but it would still be fun!
+
+![image of Chip running out of time](assets/images/for_README/out_of_time.png)
+
+All of the tiles used were taken from the [Chips Challenge Wiki][chips_wiki], and I greatly appreciate their hard work and their making the game graphics available for public use. The backgrounds and info panels came from screenshots, lightly edited with Gimp.
+
+[chips_wiki]: http://chipschallenge.wikia.com/wiki/Chip%27s_Challenge_Wiki
+
+### Implementation
+
+Chips is written in JavaScript, using the D3 library for object rendering and manipulation, and one jQuery call for DOM content loaded.
+
+```javascript
+// from main.js : the webpack entry file
+
+import $ from 'jQuery';
+import ChipsChallenge from './chips_game';
+
+// asynch DOMContentLoaded function. The game will not run until the HTML document has loaded.
+$(() => {
+  new ChipsChallenge();
+});
+```
+
+```javascript
+// from map.js : creating the first level
+addItems () {
+  // item starting postions are kept in an object which relates item type to arrays of those items' starting positions
+  let mapItems = this.itemStartingPositions();
+  let items = Object.keys(mapItems);
+
+  // making each type of item and appending to to the map (an SVG object)
+  items.forEach(itemType => {
+    // itemDetail is an imported function from 'items.js' with item name and image path info
+    let nameString = itemDetail[itemType];
+
+    // make an image def (see next function) for each type of item
+    this.makeImageDef(nameString);
+
+    mapItems[itemType].forEach(itemPos => {
+      let x = itemPos[0];
+      let y = itemPos[1];
+
+      // this.gameMap is a d3 SVG node object, and here we are appening each new object to it
+      let item = this.gameMap.append('rect')
+      .attr('x', x * this.tileSize)
+      .attr('y', y * this.tileSize)
+      .attr('width', this.tileSize)
+      .attr('height', this.tileSize)
+      // here's that image def we made above
+      .style('fill', `url(#${nameString})`)
+      .attr('class', itemType);
+
+      // this.gameObjects is used heavily in the chips_game class
+      this.gameObjects[itemType] = [];
+      this.gameObjects[itemType].push(item);
+    });
+  });
+}
+
+// adds each image to the page once for faster rendering of individual items which those images
+makeImageDef (nameString) {
+  let defs = this.gameMap.append('svg:defs');
+
+  defs.append('svg:pattern')
+  .attr('id', `${nameString}`)
+  .attr('width', this.tileSize)
+  .attr('height', this.tileSize)
+  .attr("patternUnits", "userSpaceOnUse")
+  .append("svg:image")
+  .attr("xlink:href", `assets/images/${nameString}.png`)
+  .attr("width", this.tileSize)
+  .attr("height", this.tileSize)
+  .attr("x", 0)
+  .attr("y", 0);
+}
+
+```
 
 In order to make the code easily digestible and editable/debuggable, I anticipate breaking game logic into the following files, using the Node module Webpack to bundle the files into one script:
 
@@ -60,38 +136,9 @@ In order to make the code easily digestible and editable/debuggable, I anticipat
 
 - **items.js**: most of the items, monsters, and Chip himself have one function, which is why this game isn't too completely out of the realm of possibility for a four-day project (also I'm only doing level 1). Thus, classes will be grouped together here until they become large enough to need their own file.
 
-### Implementation Timeline
+### Future plans
 
-**Day 1**
-
-- Set up game files in [lib].
-- Set up index.html and Webpack bundler in root directory.
-- Set up CSS files in [assets].
-- Make sure game structure logic outlined above is sound.
-
-[lib]: /lib
-[assets]: /assets
-
-**Day 2**
-
-- Continue working on game logic.
-- Test game visually using CSS classes and simple colors.
-- Build out app background in CSS.
-
-**Day 3**
-
-- Create icons for items and board elements.
-- Style, style, style.
-- Add help and other auxiliary features outlines above.
-- Add refresh button functionality.
-
-**Day 4**
-
-- Finish any outstanding functionality.
-- Work on bonus features outlined below, time permitting.
-
-### Bonus Features
-
-- More levels!
-- Best time counter!
-  - Note: this game will have no database, so this feature will not persist on refresh.
+- Add items to the Info Panel inventory.
+- Refactor gameplay to center Chip on the original 9x9 grid and change display as he moves, making the game much more interesting and challenging to play.
+- Refactor map creation code to make it much easier to add more levels.
+- Implement the best time counter detailed the the Game overview section above.
