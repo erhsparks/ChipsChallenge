@@ -288,6 +288,7 @@ I imagine that with a bit more familiarity than the four days that I wrote this 
 ### Future plans
 
 - Add items to the Info Panel inventory.
+- Add replay button.
 - Refactor gameplay to center Chip on the original 9x9 grid and change display as he moves, making the game much more interesting and challenging to play.
 - Refactor map creation code to make it much easier to add more levels.
 - Implement the best time counter detailed the the Game overview section above.
