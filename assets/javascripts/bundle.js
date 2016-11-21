@@ -26998,6 +26998,12 @@
 	
 	var itemDetail = _interopRequireWildcard(_items);
 	
+	var _image_defs = __webpack_require__(7);
+	
+	var _image_defs2 = _interopRequireDefault(_image_defs);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27041,22 +27047,15 @@
 	  }, {
 	    key: 'addOtherChipFaces',
 	    value: function addOtherChipFaces() {
-	      this.makeImageDef('chip_up');
-	      this.makeImageDef('chip_left');
-	      this.makeImageDef('chip_right');
-	    }
-	  }, {
-	    key: 'makeImageDef',
-	    value: function makeImageDef(nameString) {
-	      var defs = this.gameMap.append('svg:defs');
-	
-	      defs.append('svg:pattern').attr('id', '' + nameString).attr('width', this.tileSize).attr('height', this.tileSize).attr("patternUnits", "userSpaceOnUse").append("svg:image").attr("xlink:href", 'assets/images/' + nameString + '.png').attr("width", this.tileSize).attr("height", this.tileSize).attr("x", 0).attr("y", 0);
+	      (0, _image_defs2.default)(this.gameMap, this.tileSize, 'chip_up');
+	      (0, _image_defs2.default)(this.gameMap, this.tileSize, 'chip_left');
+	      (0, _image_defs2.default)(this.gameMap, this.tileSize, 'chip_right');
 	    }
 	  }, {
 	    key: 'addGrid',
 	    value: function addGrid() {
 	      var nameString = tileDetail.regularFloor;
-	      this.makeImageDef(nameString);
+	      (0, _image_defs2.default)(this.gameMap, this.tileSize, nameString);
 	
 	      for (var y = 0; y < this.numRows; y++) {
 	        for (var x = 0; x < this.numCols; x++) {
@@ -27074,7 +27073,7 @@
 	
 	      tiles.forEach(function (tileType) {
 	        var nameString = tileDetail[tileType];
-	        _this.makeImageDef(nameString);
+	        (0, _image_defs2.default)(_this.gameMap, _this.tileSize, nameString);
 	
 	        tileStarts[tileType].forEach(function (tilePos) {
 	          var x = tilePos[0];
@@ -27094,7 +27093,7 @@
 	
 	      items.forEach(function (itemType) {
 	        var nameString = itemDetail[itemType];
-	        _this2.makeImageDef(nameString);
+	        (0, _image_defs2.default)(_this2.gameMap, _this2.tileSize, nameString);
 	
 	        mapItems[itemType].forEach(function (itemPos) {
 	          var x = itemPos[0];
@@ -27178,7 +27177,37 @@
 	var yellowKeys = exports.yellowKeys = 'yellow_key';
 
 /***/ },
-/* 7 */,
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _d = __webpack_require__(3);
+	
+	var d3 = _interopRequireWildcard(_d);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	var makeImageDef = function makeImageDef(d3El, tileSize, nameString) {
+	  var idName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : nameString;
+	  var patternWidthOffset = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+	  var xOffset = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+	
+	  var defs = d3El.append('svg:defs');
+	
+	  var patternWidth = tileSize + patternWidthOffset;
+	  var x = xOffset || 0;
+	
+	  defs.append('svg:pattern').attr('id', '' + idName).attr('width', patternWidth).attr('height', tileSize).attr("patternUnits", "userSpaceOnUse").append("svg:image").attr("xlink:href", 'assets/images/' + nameString + '.png').attr("width", tileSize).attr("height", tileSize).attr("x", x).attr("y", 0);
+	};
+	
+	exports.default = makeImageDef;
+
+/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27194,9 +27223,15 @@
 	
 	var d3 = _interopRequireWildcard(_d);
 	
-	var _tiles = __webpack_require__(5);
+	var _items = __webpack_require__(6);
 	
-	var tileDetail = _interopRequireWildcard(_tiles);
+	var itemDetail = _interopRequireWildcard(_items);
+	
+	var _image_defs = __webpack_require__(7);
+	
+	var _image_defs2 = _interopRequireDefault(_image_defs);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -27209,6 +27244,12 @@
 	    this.timeLeft = timeLeft;
 	    this.chipsLeft = chipsLeft;
 	    this.chipHasItems = chipHasItems;
+	    this.displayed = {
+	      blueKeys: false,
+	      redKeys: false,
+	      yellowKeys: false,
+	      greenKeys: false
+	    };
 	
 	    this.tileSize = 40;
 	    this.width = 195;
@@ -27223,6 +27264,7 @@
 	
 	      this.addInfoText();
 	      this.addInfoValues();
+	      this.makeKeyDefs();
 	    }
 	  }, {
 	    key: 'addInfoValues',
@@ -27247,6 +27289,31 @@
 	      this.infoPane.append('text').attr('x', 53).attr('y', 198).text('Chips').attr('class', 'info-pane-text');
 	
 	      this.infoPane.append('text').attr('x', 59).attr('y', 226).text('Left').attr('class', 'info-pane-text');
+	    }
+	  }, {
+	    key: 'makeKeyDefs',
+	    value: function makeKeyDefs() {
+	      var _this = this;
+	
+	      this.xOffset = 17;
+	      this.yOffset = 280;
+	
+	      var patternWidthOffsets = {
+	        redKeys: this.xOffset,
+	        blueKeys: this.xOffset,
+	        yellowKeys: this.xOffset + this.tileSize,
+	        greenKeys: this.xOffset + 2 * this.tileSize
+	      };
+	
+	      Object.keys(this.chipHasItems).forEach(function (itemName, i) {
+	        itemName = itemName.slice(1);
+	        var nameString = itemDetail[itemName];
+	        var itemId = nameString + '_in_pane';
+	        var xOffset = 0;
+	        if (itemName === 'redKeys') xOffset = _this.xOffset;
+	
+	        (0, _image_defs2.default)(_this.infoPane, _this.tileSize, nameString, itemId, patternWidthOffsets[itemName], xOffset);
+	      });
 	    }
 	  }, {
 	    key: 'updateChipsLeft',
@@ -27283,26 +27350,25 @@
 	  }, {
 	    key: 'updateItems',
 	    value: function updateItems() {
-	      // currently not working but will eventually display
-	      // the items that Chip has picked up.
+	      var _this2 = this;
 	
-	      // console.log(this.chipHasItems);
-	      // let chipsItems = this.chipHasItems;
-	      //
-	      //
-	      // Object.keys(chipsItems).forEach((itemName, i) => {
-	      //   if (chipsItems[itemName] > 0) {
-	      //     itemName = itemName.slice(1);
-	      //
-	      //     this.infoPane.append('rect')
-	      //     .attr('x', 17 + (i * this.tileSize))
-	      //     .attr('y', 280)
-	      //     .attr('width', this.tileSize)
-	      //     .attr('height', this.tileSize)
-	      //     .style('fill', `url(#blue_key)`)
-	      //     .attr('class', `has-${itemName}`);
-	      //   }
-	      // });
+	      console.log(this.chipHasItems);
+	      var chipsItems = this.chipHasItems;
+	
+	      Object.keys(chipsItems).forEach(function (itemName, i) {
+	        var nameString = itemName.slice(1);
+	        var idString = itemDetail[nameString];
+	
+	        if (chipsItems[itemName] > 0 && !_this2.displayed[nameString]) {
+	          _this2.infoPane.append('rect').attr('x', _this2.xOffset + i * _this2.tileSize).attr('y', _this2.yOffset).attr('width', _this2.tileSize).attr('height', _this2.tileSize).style('fill', 'url(#' + idString + '_in_pane)').attr('class', 'has-' + nameString);
+	
+	          _this2.displayed[nameString] = true;
+	        } else if (_this2.displayed[nameString] && chipsItems[itemName] === 0) {
+	          _this2.infoPane.select('.has-' + nameString).remove();
+	
+	          _this2.displayed[nameString] = false;
+	        }
+	      });
 	    }
 	  }]);
 	

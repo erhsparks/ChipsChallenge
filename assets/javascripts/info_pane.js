@@ -1,11 +1,18 @@
 import * as d3 from 'd3';
-import * as tileDetail from './tiles';
+import * as itemDetail from './items';
+import makeImageDef from './image_defs';
 
 class InfoPane {
   constructor(timeLeft, chipsLeft, chipHasItems) {
     this.timeLeft = timeLeft;
     this.chipsLeft = chipsLeft;
     this.chipHasItems = chipHasItems;
+    this.displayed = {
+      blueKeys: false,
+      redKeys: false,
+      yellowKeys: false,
+      greenKeys: false
+    };
 
     this.tileSize = 40;
     this.width = 195;
@@ -24,6 +31,7 @@ class InfoPane {
 
     this.addInfoText();
     this.addInfoValues();
+    this.makeKeyDefs();
   }
 
   addInfoValues () {
@@ -76,6 +84,33 @@ class InfoPane {
     .attr('class', 'info-pane-text');
   }
 
+  makeKeyDefs () {
+    this.xOffset = 17;
+    this.yOffset = 280;
+
+    let patternWidthOffsets = {
+      redKeys: this.xOffset,
+      blueKeys: this.xOffset,
+      yellowKeys: this.xOffset + this.tileSize,
+      greenKeys: this.xOffset + 2 * this.tileSize
+    };
+
+    Object.keys(this.chipHasItems).forEach((itemName, i) => {
+      itemName = itemName.slice(1);
+      let nameString = itemDetail[itemName];
+      let itemId = `${nameString}_in_pane`;
+      let xOffset = 0;
+      if (itemName === 'redKeys') xOffset = this.xOffset;
+
+      makeImageDef(
+        this.infoPane, this.tileSize,
+        nameString, itemId,
+        patternWidthOffsets[itemName], xOffset
+      );
+    });
+  }
+
+
   updateChipsLeft () {
     let chipsLeftNode = this.infoPane.select('.chips-left');
     chipsLeftNode.text(this.chipsLeft);
@@ -107,26 +142,29 @@ class InfoPane {
   }
 
   updateItems () {
-    // currently not working but will eventually display
-    // the items that Chip has picked up.
+    console.log(this.chipHasItems);
+    let chipsItems = this.chipHasItems;
 
-    // console.log(this.chipHasItems);
-    // let chipsItems = this.chipHasItems;
-    //
-    //
-    // Object.keys(chipsItems).forEach((itemName, i) => {
-    //   if (chipsItems[itemName] > 0) {
-    //     itemName = itemName.slice(1);
-    //
-    //     this.infoPane.append('rect')
-    //     .attr('x', 17 + (i * this.tileSize))
-    //     .attr('y', 280)
-    //     .attr('width', this.tileSize)
-    //     .attr('height', this.tileSize)
-    //     .style('fill', `url(#blue_key)`)
-    //     .attr('class', `has-${itemName}`);
-    //   }
-    // });
+    Object.keys(chipsItems).forEach((itemName, i) => {
+      let nameString = itemName.slice(1);
+      let idString = itemDetail[nameString];
+
+      if (chipsItems[itemName] > 0 && !this.displayed[nameString]) {
+        this.infoPane.append('rect')
+        .attr('x', this.xOffset + (i * this.tileSize))
+        .attr('y', this.yOffset)
+        .attr('width', this.tileSize)
+        .attr('height', this.tileSize)
+        .style('fill', `url(#${idString}_in_pane)`)
+        .attr('class', `has-${nameString}`);
+
+        this.displayed[nameString] = true;
+      } else if (this.displayed[nameString] && chipsItems[itemName] === 0) {
+        this.infoPane.select(`.has-${nameString}`).remove();
+
+        this.displayed[nameString] = false;
+      }
+    });
   }
 }
 

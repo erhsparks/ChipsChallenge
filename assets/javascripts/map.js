@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import * as tileDetail from './tiles';
 import * as itemDetail from './items';
+import makeImageDef from './image_defs';
 
 class LevelOneMap {
   constructor (root) {
@@ -43,30 +44,14 @@ class LevelOneMap {
   }
 
   addOtherChipFaces() {
-    this.makeImageDef('chip_up');
-    this.makeImageDef('chip_left');
-    this.makeImageDef('chip_right');
-  }
-
-  makeImageDef (nameString) {
-    let defs = this.gameMap.append('svg:defs');
-
-    defs.append('svg:pattern')
-    .attr('id', `${nameString}`)
-    .attr('width', this.tileSize)
-    .attr('height', this.tileSize)
-    .attr("patternUnits", "userSpaceOnUse")
-    .append("svg:image")
-    .attr("xlink:href", `assets/images/${nameString}.png`)
-    .attr("width", this.tileSize)
-    .attr("height", this.tileSize)
-    .attr("x", 0)
-    .attr("y", 0);
+    makeImageDef(this.gameMap, this.tileSize, 'chip_up');
+    makeImageDef(this.gameMap, this.tileSize, 'chip_left');
+    makeImageDef(this.gameMap, this.tileSize, 'chip_right');
   }
 
   addGrid () {
     let nameString = tileDetail.regularFloor;
-    this.makeImageDef(nameString);
+    makeImageDef(this.gameMap, this.tileSize, nameString);
 
     for (let y = 0; y < this.numRows; y++) {
       for (let x = 0; x < this.numCols; x++) {
@@ -87,7 +72,7 @@ class LevelOneMap {
 
     tiles.forEach(tileType => {
       let nameString = tileDetail[tileType];
-      this.makeImageDef(nameString);
+      makeImageDef(this.gameMap, this.tileSize, nameString);
 
       tileStarts[tileType].forEach(tilePos => {
         let x = tilePos[0];
@@ -110,7 +95,7 @@ class LevelOneMap {
 
     items.forEach(itemType => {
       let nameString = itemDetail[itemType];
-      this.makeImageDef(nameString);
+      makeImageDef(this.gameMap, this.tileSize, nameString);
 
       mapItems[itemType].forEach(itemPos => {
         let x = itemPos[0];
