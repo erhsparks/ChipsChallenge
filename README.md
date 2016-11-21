@@ -30,10 +30,12 @@ Users are greeted by a welcome screen with a view of the game and an info box in
 The player moves Chip using the arrow keys, and has him pick up items by walking into the square that item is on. As soon as Chip makes his first move, the welcome message disappears and the level info is revealed.
 
 ![image of the game with timer counting](assets/images/for_README/timer_countdown.png)
+![image of Chip picking up a key](assets/images/for_README/get_key.png)
+![image of Chip having picked up all the keys](assets/images/for_README/get_all_the_keys.png)
 
 Chip is unable to walk through walls, and may only pass remove locked doors and the chip collector socket if he has a key of the appropriate color or all the chips required for that level, respectively. All keys except the green key, which may be used indefinitely, are removed from Chip's inventory after opening a door of the same color.
 
-![image of Chip going through a key door](assets/images/for_README/keys_doors.png)
+![image of Chip going through a key door](assets/images/for_README/use_last_key.png)
 
 The user may revisit the instructions at any time by moving Chip back onto the hint square. The timer is paused while Chip is standing here.
 
@@ -60,7 +62,6 @@ All of the tiles used were taken from the [Chips Challenge Wiki][chips_wiki], an
 ### Implementation
 
 Chips is written in JavaScript, using the D3 library for object rendering and manipulation, and one jQuery call for DOM content loaded.
-
 
 jQuery example:
 ```JavaScript
@@ -95,7 +96,7 @@ addItems () {
     let nameString = itemDetail[itemType];
 
     // make an image def (see next function) for each type of item
-    this.makeImageDef(nameString);
+    makeImageDef(this.gameMap, this.tileSize, nameString);
 
     mapItems[itemType].forEach(itemPos => {
       let x = itemPos[0];
@@ -119,24 +120,33 @@ addItems () {
   });
 }
 
-// adds each image to the page once for faster rendering of individual
-// items which those images
-makeImageDef (nameString) {
-  let defs = this.gameMap.append('svg:defs');
+// from assets/javascripts/image_defs.js : adding each image to the
+// page once for faster rendering of items which use those images
+const makeImageDef = (
+  d3El,
+  tileSize,
+  nameString,
+  idName = nameString,
+  patternWidthOffset = 0,
+  xOffset = 0
+) => {
+  let defs = d3El.append('svg:defs');
+
+  let patternWidth = tileSize + patternWidthOffset;
+  let x = xOffset || 0;
 
   defs.append('svg:pattern')
-  .attr('id', `${nameString}`)
-  .attr('width', this.tileSize)
-  .attr('height', this.tileSize)
+  .attr('id', `${idName}`)
+  .attr('width', patternWidth)
+  .attr('height', tileSize)
   .attr("patternUnits", "userSpaceOnUse")
   .append("svg:image")
   .attr("xlink:href", `assets/images/${nameString}.png`)
-  .attr("width", this.tileSize)
-  .attr("height", this.tileSize)
-  .attr("x", 0)
+  .attr("width", tileSize)
+  .attr("height", tileSize)
+  .attr("x", x)
   .attr("y", 0);
-}
-
+};
 ```
 
 Additional styling, such as adding the green circuit board background to the body, and transforming text to uppercase, was done using CSS:
@@ -184,7 +194,7 @@ startTimer() {
       // this.infoPane points to the instance of the InfoPane class which
       // is being used to render our side panel. Because timeLeft is an
       // integer, not a pointer to an object, it must be passed to infoPane's
-      // imeLeft at each interval.
+      // timeLeft at each interval.
       this.infoPane.timeLeft = this.timeLeft;
       this.infoPane.updateTimeLeft();
     } else {
@@ -289,7 +299,6 @@ I imagine that with a bit more familiarity than the four days that I wrote this 
 
 ### Future plans
 
-- Add items to the Info Panel inventory.
 - Add replay button.
 - Refactor gameplay to center Chip on the original 9x9 grid and change display as he moves, making the game much more interesting and challenging to play.
 - Refactor map creation code to make it much easier to add more levels.
