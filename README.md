@@ -1,4 +1,6 @@
-## [Chips Challenge][live]
+## Chips Challenge
+
+[Play it here!][live]
 
 A clone of the first level of the 1992 computer game [Chips Challenge][wikipedia], created by Chuck Sommerville.
 
