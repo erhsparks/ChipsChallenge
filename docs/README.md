@@ -34,7 +34,7 @@ Users will:
 
 The app is contained on a single page, just like the original game. As in the original, there will be a square gameplay screen, which displays a 9 x 9 grid with Chip in the center, which represents the currently viewable area of the map. As Chip moves, he stays centered and the map's viewing area shifts.
 
-![Image of proposed game wireframe](docs/wireframe.png)
+![Image of proposed game wireframe](/docs/wireframe.png)
 
 Within this limited field of view, Chip must figure out how to get all the chips needed (quantified in the 'CHIPS LEFT' box to the right of the game window) to pass the level before the clock runs out (displayed in seconds under 'TIME').
 
